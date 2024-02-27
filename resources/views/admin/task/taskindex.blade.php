@@ -24,6 +24,8 @@
                     <th class="text-uppercase text-primary text-xxs font-weight-bolder opacity-7 ps-2">Task Name</th>
                     <th class="text-uppercase text-primary text-xxs font-weight-bolder opacity-7 ps-2">Description</th>
                     <th class="text-uppercase text-primary text-xxs font-weight-bolder opacity-7 ps-2">Due Date</th>
+                    <th class="text-uppercase text-primary text-xxs font-weight-bolder opacity-7 ps-2  ">Status</th>
+                    <th class="text-uppercase text-primary text-xxs font-weight-bolder opacity-7 ps-2  "></th>
                     <th class="text-uppercase text-primary text-xxs font-weight-bolder opacity-7 ps-2  ">Action</th>
 
 
@@ -42,6 +44,16 @@
             <td>{{ $task->description}}</td>
             <td>{{ $task->due_date }}</td>
 
+            <td>{{ $task->status }}</td>
+            {{-- <td><a class="btn btn-warning btn-sm">
+                Ready for testing</a></td> --}}<td>
+                @if ($task->status === 'in_progress')
+                <form method="POST" action="{{ route('task.readyForTesting', ['fid' => $fid, 'id' => $task->id]) }}">
+                  @csrf
+                  <button type="submit" class="btn btn-warning btn-sm">Ready for Testing</button>
+                </form>
+                @endif
+                </td>
            <td><a class="btn btn-primary btn-sm"
                 href="{{ route('project.edit', ['id' => $task->id,'fid'=>$fid]) }}"><i class="fa fa-edit"></i>Edit</a>
                     <a class="btn btn-danger btn-sm" href="{{ route('project.delete', ['id' => $task->id,'fid'=>$fid]) }}"><i class="fa fa-trash"></i>Delete</a></td>

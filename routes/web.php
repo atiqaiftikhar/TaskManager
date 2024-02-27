@@ -5,6 +5,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\FeatureController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\TaskViewController;
@@ -59,6 +60,7 @@ Route::group(['prefix'=>'admin'],function(){
         Route::post('/update/{id}',[ProjectController::class,'update'])->name('project.update');
         Route::get('/delete/{id}',[ProjectController::class,'delete'])->name('project.delete');
 
+
         });
 
 
@@ -70,12 +72,21 @@ Route::group(['prefix'=>'admin'],function(){
             Route::get('/edit/{id}',[TaskController::class,'edit'])->name('task.edit');
             Route::post('/update/{id}',[TaskController::class,'update'])->name('task.update');
             Route::get('/delete/{id}',[TaskController::class,'delete'])->name('task.delete');
+            Route::post('/readyfortesting', [TaskController::class, 'readyForTesting'])->name('task.readyForTesting');
+
             });
 
             Route::group(['prefix' => '/user'], function() {
                 Route::get('/',[UserController::class,'user'])->name('user.index');
 
                 });
+
+                Route::group(['prefix' => '/notification'], function() {
+                    // Route::get('/',[NotificationController::class,'index'])->name('notifications.index');
+                    Route::get('/', [NotificationController::class, 'show'])->name('notifications.show');
+
+                    });
+
 });
 
 

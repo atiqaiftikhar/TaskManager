@@ -2,6 +2,7 @@
 @section('content')
 <div class="container">
     <form action="{{ $tasks->id != null ? route('task.update', ['id' => $tasks->id,'fid'=>$fid]):route('task.store', ['fid' => $fid]) }}" method="post">
+
         @csrf
         <h1>Task Form </h1>
 
@@ -30,6 +31,15 @@
     </div>
 @endforeach --}}
 
+<label for="status">Task Status:</label>
+                     <select name="status" id="status" class="form-control">
+                        <option value="assign">Assign</option>
+                         <option value="in_progress">In Progress</option>
+                         <option value="testing">Testing</option>
+                          <option value="completed">Completed</option>
+
+
+                     </select>
 
         <button class="btn btn-success mt-4 float-end mb-4" type="submit"><i class="fa fa-check-circle"
             style="font-size:25px; color: rgb(43, 255, 43);"></i> <span>SAVE</span></button>

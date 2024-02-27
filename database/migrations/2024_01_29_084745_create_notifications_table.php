@@ -14,9 +14,10 @@ return new class extends Migration
         Schema::create('notifications', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('user_id');
-            $table->string('type');
+            // $table->string('type');
             $table->string('message');
-            $table->dateTime('date_time');
+            // $table->dateTime('date_time');
+            $table->dateTime('due_date');
             $table->boolean('is_read')->default(false);
             $table->timestamps();
         });

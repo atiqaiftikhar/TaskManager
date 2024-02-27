@@ -1,13 +1,14 @@
 @extends('layouts.masterfront')
 @section('content')
-<div
+{{-- <div
     class="bg-image"
     style="
       background-image: url('assets/img/aboutus.png');
       height: 100vh;
     "
   >
-  </div>
+  </div> --}}
+  <img src="assets/img/about.png" width="100%"  height="100%">
 
  <div class="container">
     <h2 class="text-center" style="color: #1d2b79; margin-top: 20px;">Our Mission</h2>

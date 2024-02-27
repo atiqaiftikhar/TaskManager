@@ -5,8 +5,8 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title>TaskEase</title>
 	<link rel="stylesheet" href="{{ asset('assets/bootstrap/css/bootstrap.min.css') }}">
-	<link rel="stylesheet" href="{{asset('assets/bootsrap/css/font-awesome.min.css')}}">
-	<script src="{{asset('assets/bootsrap/js/bootstrap.bundle.min.js')}}" type="text/javascript" charset="utf-8" async defer></script>
+	<link rel="stylesheet" href="{{asset('assets/bootstrap/css/font-awesome.min.css')}}">
+	<script src="{{asset('assets/bootstrap/js/bootstrap.bundle.min.js')}}" type="text/javascript" charset="utf-8" async defer></script>
 
     <link href="{{asset('assets/vendor/aos/aos.css')}}" rel="stylesheet">
     <link href="{{asset('assets/vendor/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
@@ -91,10 +91,10 @@
 <body>
 
 
-<nav class="navbar  bg-dark navbar-dark navbar-expand-lg">
+<nav class="navbar  bg-light navbar-light navbar-expand-lg">
 		<div class="container">
 			<a class="navbar-brand" href="" style="color: #47a5c7;" >
-			<img width="100" height="80" src="{{asset('assets/img/LOGO.png')}}">TaskEase
+			<img width="100" height="80" src="{{asset('assets/img/Logos.png')}}">TaskEase
 		</a>
 		<button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#menu" type="">
 			<span class="navbar-toggler-icon"></span>
@@ -172,6 +172,27 @@
 		</div>
 	</nav>
     @yield('content')
+
+
+
+        <div class="p-3 bg-primary" ></div>
+        <a href="#" id="scrollToTop" style="display: none;"><i class="fa fa-arrow-up"></i></a>
+
+        <div class="mt-5" ></div>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm text-center">
+                    <a href=""><img src="" class="mt-2 img-fluid" width="250px" alt=""></a>
+                </div>
+                <hr>
+                <p class="text-center">© Copyright {{ date('Y') }} | All Rights Reserved | <a
+                        href="">TaskEase</a></p>
+            </div>
+        </div>
+
+
+
+
 
 </body>
 </html>

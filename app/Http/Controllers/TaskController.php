@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Notification;
 use App\Models\Project;
 use App\Models\ProjectUser;
 use App\Models\Task;
@@ -59,7 +60,15 @@ public function create ($fid)
          $tasks->status = $request->input('status', 'assign');
         // return $tasks;
           $tasks->save();
-
+        //   NotificationController::sendTaskNotification($tasks);
+        Notification::create([
+            'user_id' => auth()->user()->id,
+            'task_id' => $tasks->id,
+            'message' => 'You have been assigned a new task: ' . $tasks->title,
+            'creation_date' => now(),
+            'due_date' => $tasks->due_date,
+            'is_read' => false // Initially set as unread
+        ]);
 
 
          return redirect()->route('task.index',['fid'=>$fid])->with('success','Task Added Successfully');
@@ -78,11 +87,17 @@ public function create ($fid)
     public function update(Request $request,$fid, $id)
     {
 
-        $tasks=Task::find($id);
-        $data=$request->all();
-        // $tasks->users()->attach($request->input('team_members'));
-        $tasks->update($data);
-        return redirect()->route('task.index',)->with('success', 'Task Updated Successfully');
+        $request->validate([
+            'status' => 'required|in:in_progress,testing',
+        ]);
+
+        $tasks = Task::findOrFail($id);
+
+
+        $tasks->update([
+            'status' => $request->input('status')
+        ]);
+        return redirect()->route('task.index',['fid' => $fid])->with('success', 'Task Updated Successfully');
     }
 
     public function delete($id)
@@ -94,7 +109,35 @@ public function create ($fid)
         return redirect()->back()->with('success', 'Task Deleted Successfully');
     }
 
+    public function readyForTesting(Request $request, $id)
+{
+
+    $task = Task::findOrFail($id);
 
 
+    if ($task->project && $task->project->creator) {
+
+        $projectCreatorId = $task->project->creator->id;
+
+    Notification::create([
+        'user_id' => $projectCreatorId,
+        'task_id' => $task->id,
+        'message' => 'Task #' . $task->id . ' is ready for testing.',
+        'creation_date' => now(),
+        'due_date' => $task->due_date,
+
+    ]);
+
+
+    $task->status = 'Testing';
+    $task->save();
+
+    return redirect()->back()->with('success', 'Task is now ready for testing');
+} else {
+
+    return redirect()->back()->with('error', 'Failed to find project or project creator');
+}
+
+}
 
 }

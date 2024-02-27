@@ -1,5 +1,6 @@
 @extends('layouts.masterfront')
 @section('content')
+<img   height="100%" width="100%" src="assets/img/blogss.png">
 <div class="container" style="margin-top: 30px;">
     <h1  class="text-center" style="color: #336f8b;">BLOGS</h1>
     <h4  class="text-center" style="color: #202674; margin-top: 30px; ">
@@ -7,7 +8,7 @@
     </h4>
 
 
-    <img style="margin-top: 20px;" class="container-fluid" height="450" width="50%" src="assets/img/blog.png">
+    {{-- <img style="margin-top: 20px;" class="container-fluid" height="450" width="50%" src="assets/img/blog.png"> --}}
     <p class="text-center" style="margin-top: 20px;">Project management has evolved from few basic principles into a domain of knowledge. Thankfully, many bloggers are helping project managers to stay updated with the latest tools, techniques, methodologies, processes and much more through their blogs. In this article, you will learn about 10 most popular project management blogs that every project manager must read in 2022.</p>
 
 

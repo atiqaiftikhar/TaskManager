@@ -1,6 +1,9 @@
 @extends('layouts.masterfront')
 @section('content')
+<img src="{{asset('assets/img/featuress.png')}}" width="100%" height="100%">
 <div class="container " style="margin-top: 30px;">
+
+
 
     <h2 >
         Made for You. Made for Your Team
@@ -8,7 +11,6 @@
     <h1>
         TaskEase Features.
     </h1>
-
     <div class="container mt-5">
       <div class="row">
         <div class="col-md-3">

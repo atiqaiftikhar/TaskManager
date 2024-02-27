@@ -28,6 +28,17 @@ class User extends Authenticatable
     return $this->belongsToMany(Project::class,'project_users');
 }
 
+ public function notifications()
+ {
+     return $this->hasMany(Notification::class);
+ }
+
+
+ public function tasks()
+ {
+     return $this->hasMany(Task::class, 'assign_to');
+ }
+
     /**
      * The attributes that should be hidden for serialization.
      *
