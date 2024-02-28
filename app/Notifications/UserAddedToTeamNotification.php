@@ -42,7 +42,7 @@ class UserAddedToTeamNotification extends Notification
             ->line('You have been added to a new project.')
             ->line('Project Name: ' . $this->project->name)
             ->line('Project Description: ' . $this->project->description)
-            ->action('View Project', route('project.show', $this->project->id))
+            ->action('View Project', route('project.index', $this->project->id))
             ->line('Thank you for using our application!');
     }
 

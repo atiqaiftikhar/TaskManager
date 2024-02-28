@@ -8,6 +8,7 @@ use App\Models\ProjectUser;
 use App\Models\Task;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
@@ -19,14 +20,38 @@ public function __construct()
 //     return Project::find($id);
 
 //  }
+// public function task($fid)
+// {
+
+//     $project=Project::find($fid);
+//     $tasks=Task::where('project_id',$fid)->get();
+//     return view('admin.task.taskindex',compact('tasks','project','fid'));
+
+
+// }
 public function task($fid)
 {
 
-    $project=Project::find($fid);
-    $tasks=Task::where('project_id',$fid)->get();
-    return view('admin.task.taskindex',compact('tasks','project','fid'));
+    $project = Project::find($fid);
 
 
+    $userId = Auth::id();
+
+
+    $userRoleId = Auth::user()->role_id;
+
+
+    if ($userRoleId == 2) {
+
+        $tasks = Task::where('project_id', $fid)->get();
+    } else {
+
+        $tasks = Task::where('project_id', $fid)
+                     ->where('assign_to', $userId)
+                     ->get();
+    }
+
+    return view('admin.task.taskindex', compact('tasks', 'project', 'fid'));
 }
 public function create ($fid)
     {
@@ -114,10 +139,12 @@ public function create ($fid)
 
     $task = Task::findOrFail($id);
 
+    $project = $task->project;
+    // return($project);
 
-    if ($task->project && $task->project->creator) {
+    if ($project && $project->creator) {
 
-        $projectCreatorId = $task->project->creator->id;
+        $projectCreatorId = $project->creator->id;
 
     Notification::create([
         'user_id' => $projectCreatorId,
