@@ -224,5 +224,13 @@ public function create ($fid)
 }
 
 }
+public function detail($fid, $id)
+{
+
+    $task = Task::find($id);
+
+
+    return view('admin.task.detail', compact('task', 'fid'));
+}
 
 }

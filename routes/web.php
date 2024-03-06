@@ -73,6 +73,7 @@ Route::group(['prefix'=>'admin'],function(){
             Route::post('/update/{id}',[TaskController::class,'update'])->name('task.update');
             Route::get('/delete/{id}',[TaskController::class,'delete'])->name('task.delete');
             Route::post('/readyfortesting', [TaskController::class, 'readyForTesting'])->name('task.readyForTesting');
+            Route::get('/detail/{id}',[TaskController::class,'detail'])->name('task.detail');
 
             });
 
