@@ -55,8 +55,8 @@
                 @endif
                 </td>
            <td><a class="btn btn-primary btn-sm"
-                href="{{ route('project.edit', ['id' => $task->id,'fid'=>$fid]) }}"><i class="fa fa-edit"></i>Edit</a>
-                    <a class="btn btn-danger btn-sm" href="{{ route('project.delete', ['id' => $task->id,'fid'=>$fid]) }}"><i class="fa fa-trash"></i>Delete</a></td>
+                href="{{ route('task.edit', ['id' => $task->id,'fid'=>$fid]) }}"><i class="fa fa-edit"></i>Edit</a>
+                    <a class="btn btn-danger btn-sm" href="{{ route('task.delete', ['id' => $task->id,'fid'=>$fid]) }}"><i class="fa fa-trash"></i>Delete</a></td>
         </tr>
         @endforeach
 
