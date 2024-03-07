@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Task extends Model
 {
     use HasFactory;
-    protected $fillable = [ 'id','project_id','assign_to','title','description','status','due_date'];
+    protected $fillable = [ 'id','project_id','assign_to','title','description','status','due_date','task_created_by'];
     public function project()
 {
     return $this->belongsTo(Project::class, 'project_id');
@@ -16,6 +16,10 @@ class Task extends Model
     public function assignee()
     {
         return $this->belongsTo(User::class, 'assign_to');
+    }
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'task_created_by');
     }
 
     // protected static function boot()

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ActivityLog;
 use App\Models\Notification;
 use App\Models\Project;
 use App\Models\ProjectUser;
@@ -163,13 +164,20 @@ public function create ($fid)
         ]);
 
 
-        $assign_to = $request->input('assign_to');
-        // dd($assign_to);
-        // ProjectUser::where('project_id', $fid)->update(['user_id' => $assign_to]);
-        // dd($assign_to);
-        ProjectUser::where('project_id', $fid)
-        ->where('user_id', $assign_to)
-        ->update(['user_id' => $assign_to]);
+        // $assign_to = $request->input('assign_to');
+        // // dd($assign_to);
+        // // ProjectUser::where('project_id', $fid)->update(['user_id' => $assign_to]);
+        // // dd($assign_to);
+        // ProjectUser::where('project_id', $fid)
+        // ->where('user_id', $assign_to)
+        // ->update(['user_id' => $assign_to]);
+        // Retrieve the new assigned user ID from the request
+    $newAssigneeId = $request->input('assign_to');
+
+    // Remove the previous assignment and assign the new user to the task
+    ProjectUser::where('project_id', $fid)
+        ->where('id', $id)
+        ->update(['user_id' => $newAssigneeId]);
 
         return redirect()->route('task.index',['fid' => $fid])->with('success', 'Task Updated Successfully');
     }
@@ -228,9 +236,10 @@ public function detail($fid, $id)
 {
 
     $task = Task::find($id);
+    // $task = Task::with('assignedTo')->find($id);
+    $activityLogs = ActivityLog::where('task_id', $id)->orderBy('created_at', 'desc')->get();
 
-
-    return view('admin.task.detail', compact('task', 'fid'));
+    return view('admin.task.detail', compact('task', 'fid', 'activityLogs'));
 }
 
 }
