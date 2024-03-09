@@ -171,8 +171,9 @@ public function create ($fid)
          $status = array_keys(TaskStatus::getStatusOptions());
     $types= array_keys(TaskType::getTypeOptions());
     $priorities = array_keys(TaskPriority::getPriorityOptions());
+    $dynamicOptions = $this->getDynamicOptions();
 
-      return view('admin.task.taskcreate',compact('tasks','project','fid','teamMembers', 'status', 'types', 'priorities'));
+      return view('admin.task.taskcreate',compact('tasks','project','fid','teamMembers', 'status', 'types', 'priorities','dynamicOptions'));
 
     }
     public function update(Request $request,$fid, $id)
@@ -216,6 +217,8 @@ public function create ($fid)
     ProjectUser::where('project_id', $fid)
         ->where('id', $id)
         ->update(['user_id' => $newAssigneeId]);
+        $dynamicOptions = $this->getDynamicOptions();
+
 
         return redirect()->route('task.index',['fid' => $fid])->with('success', 'Task Updated Successfully');
     }
