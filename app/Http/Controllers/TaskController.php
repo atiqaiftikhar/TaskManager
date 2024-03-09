@@ -162,10 +162,15 @@ public function create ($fid)
     public function edit($fid,$id)
     {
 
-        $tasks=Task::find($id);
-        $project=Project::find($fid);
-        if (Auth::id() !== $project->created_by) {
-            abort(403, 'Unauthorized action.');
+        $task = Task::findOrFail($id);
+
+        // Check authorization
+        $projectId = $task->project_id;
+        $project = Project::findOrFail($projectId);
+
+        if (Auth::id() !== $project->created_by && Auth::id() !== $task->task_created_by) {
+            // User is not authorized to edit this task
+            return redirect()->back()->with('error', 'You are not authorized to edit this task.');
         }
          $teamMembers = User::get();
          $status = array_keys(TaskStatus::getStatusOptions());
