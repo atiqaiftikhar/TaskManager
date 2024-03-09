@@ -24,9 +24,9 @@
 
                         <select name="task_created_by" class="form-control">
                             <option value="">Select Created By</option>
-                            @foreach ($teamMembers as $member)
-                                <option value="{{ $member->id }}" {{ ($member->id == old('task_created_by')) ? 'selected' : '' }}>
-                                    {{ $member->name }}
+                            @foreach ($createdByUsers as $createdByUser)
+                                <option value="{{ $createdByUser->id }}" {{ ($createdByUser->id == old('task_created_by')) ? 'selected' : '' }}>
+                                    {{ $createdByUser->name }}
                                 </option>
                             @endforeach
                         </select>

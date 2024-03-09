@@ -77,8 +77,8 @@ public function task($fid, Request $request)
         $query->where('priority', $priority);
     }
 
-    if ($created_by = $request->created_by) {
-        $query->where('task_created_by', $created_by);
+    if ($task_created_by = $request->task_created_by) {
+        $query->where('task_created_by', $task_created_by);
     }
 
     if ($assign_to = $request->assign_to) {
@@ -88,6 +88,12 @@ public function task($fid, Request $request)
     if ($status = $request->status) {
         $query->where('status', $status);
     }
+
+
+    $createdByUserIds = Task::where('project_id', $fid)
+                            ->distinct('task_created_by')
+                            ->pluck('task_created_by');
+    $createdByUsers = User::whereIn('id', $createdByUserIds)->get();
 
     $userId = Auth::id();
     $userRoleId = Auth::user()->role_id;
@@ -103,7 +109,7 @@ public function task($fid, Request $request)
     $teamMembers = User::whereIn('id', $projectUsers)->get();
     $dynamicOptions = $this->getDynamicOptions();
 
-    return view('admin.task.taskindex', compact('tasks', 'project', 'fid', 'dynamicOptions', 'teamMembers'));
+    return view('admin.task.taskindex', compact('tasks', 'project', 'fid', 'dynamicOptions', 'teamMembers','createdByUsers'));
 }
 
 public function create ($fid)
@@ -125,38 +131,7 @@ public function create ($fid)
         return view('admin.task.taskcreate',compact('tasks','teamMembers','projectUsers','fid','creators','project','dynamicOptions'));
 
     }
-    // public function store(Request $request,$fid)
-    // {
-    //     // $teamMemberIds = $request->input('team_members');
 
-    //     $project=Project::find($fid);
-
-
-
-
-    //      $tasks = new Task();
-    //      $tasks->assign_to = $request->input('assign_to');
-    //      $tasks->project_id = $fid;
-    //      $tasks->title = $request->input('title');
-    //      $tasks->description = $request->input('description');
-    //      $tasks->due_date = $request->input('due_date');
-    //      $tasks->status = $request->input('status', 'assign');
-    //     // return $tasks;
-    //       $tasks->save();
-    //     //   NotificationController::sendTaskNotification($tasks);
-    //     Notification::create([
-    //         'user_id' => auth()->user()->id,
-    //         'task_id' => $tasks->id,
-    //         'message' => 'You have been assigned a new task: ' . $tasks->title,
-    //         'creation_date' => now(),
-    //         'due_date' => $tasks->due_date,
-    //         'is_read' => false // Initially set as unread
-    //     ]);
-
-
-    //      return redirect()->route('task.index',['fid'=>$fid])->with('success','Task Added Successfully');
-
-    // }
     public function store(Request $request, $fid)
 {
     // Validate the incoming request data
