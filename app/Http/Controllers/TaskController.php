@@ -43,32 +43,69 @@ private function getDynamicOptions()
         ]
     ];
 }
-public function task($fid)
+// public function task($fid)
+// {
+
+//     $project = Project::find($fid);
+
+
+//     $userId = Auth::id();
+
+
+//     $userRoleId = Auth::user()->role_id;
+
+
+//     if ($userRoleId == 2) {
+
+//         $tasks = Task::where('project_id', $fid)->get();
+//     } else {
+
+//         $tasks = Task::where('project_id', $fid)
+//                      ->where('assign_to', $userId)
+//                      ->get();
+//     }
+//     $projectUsers = ProjectUser::where('project_id', $fid)->pluck('user_id');
+//     $teamMembers = User::whereIn('id', $projectUsers)->get();
+//     $dynamicOptions = $this->getDynamicOptions();
+//     return view('admin.task.taskindex', compact('tasks', 'project', 'fid','dynamicOptions','teamMembers'));
+// }
+public function task($fid, Request $request)
 {
+    $query = Task::where('project_id', $fid);
 
-    $project = Project::find($fid);
+    if ($priority = $request->priority) {
+        $query->where('priority', $priority);
+    }
 
+    if ($created_by = $request->created_by) {
+        $query->where('task_created_by', $created_by);
+    }
+
+    if ($assign_to = $request->assign_to) {
+        $query->where('assign_to', $assign_to);
+    }
+
+    if ($status = $request->status) {
+        $query->where('status', $status);
+    }
 
     $userId = Auth::id();
-
-
     $userRoleId = Auth::user()->role_id;
 
-
     if ($userRoleId == 2) {
-
-        $tasks = Task::where('project_id', $fid)->get();
+        $tasks = $query->get();
     } else {
-
-        $tasks = Task::where('project_id', $fid)
-                     ->where('assign_to', $userId)
-                     ->get();
+        $tasks = $query->where('assign_to', $userId)->get();
     }
+
+    $project = Project::find($fid);
     $projectUsers = ProjectUser::where('project_id', $fid)->pluck('user_id');
     $teamMembers = User::whereIn('id', $projectUsers)->get();
     $dynamicOptions = $this->getDynamicOptions();
-    return view('admin.task.taskindex', compact('tasks', 'project', 'fid','dynamicOptions','teamMembers'));
+
+    return view('admin.task.taskindex', compact('tasks', 'project', 'fid', 'dynamicOptions', 'teamMembers'));
 }
+
 public function create ($fid)
     {
 
@@ -290,40 +327,43 @@ public function detail($fid, $id)
 
 
 
-public function filterTasks(Request $request,$fid)
-{
-    // $fid = $request->fid;
-    $query = Task::where('project_id', $fid);
-    // dd($request->all());
+// public function filterTasks(Request $request,$fid)
+// {
+//     // $fid = $request->fid;
+//     $query = Task::where('project_id', $fid);
+//     // dd($request->all());
 
-    // it also check 'null check'
-    if ($priority = $request->priority) {
-        $query->where('priority', $priority);
-    }
+//     // it also check 'null check'
+//     if ($priority = $request->priority) {
+//         $query->where('priority', $priority);
+//     }
 
-    if ($created_by=$request->created_by) {
-        $query->where('task_created_by', $created_by);
-    }
+//     if ($created_by=$request->created_by) {
+//         $query->where('task_created_by', $created_by);
+//     }
 
-    if ($assign_to=$request->assign_to) {
-        $query->where('assign_to', $assign_to);
-    }
+//     if ($assign_to=$request->assign_to) {
+//         $query->where('assign_to', $assign_to);
+//     }
 
-    if ($status=$request->status) {
-        $query->where('status', $status);
-    }
-
-
-    $tasks = $query->get();
-    $dynamicOptions = $this->getDynamicOptions();
-    $projectUsers = ProjectUser::where('project_id', $fid)->pluck('user_id');
-    $teamMembers = User::whereIn('id', $projectUsers)->get();
+//     if ($status=$request->status) {
+//         $query->where('status', $status);
+//     }
 
 
+//     $tasks = $query->get();
+//     $dynamicOptions = $this->getDynamicOptions();
+//     $projectUsers = ProjectUser::where('project_id', $fid)->pluck('user_id');
+//     $teamMembers = User::whereIn('id', $projectUsers)->get();
 
 
-    return view('admin.task.taskindex',  compact('tasks', 'fid', 'dynamicOptions', 'teamMembers'));
-}
+
+
+//     return view('admin.task.taskindex',  compact('tasks', 'fid', 'dynamicOptions', 'teamMembers'));
+// }
+
+
+
 // public function detail(Request $request, $fid, $id = null)
 // {
 //     if ($id) {

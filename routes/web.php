@@ -75,7 +75,7 @@ Route::group(['prefix'=>'admin'],function(){
             Route::get('/delete/{id}',[TaskController::class,'delete'])->name('task.delete');
             Route::post('/readyfortesting', [TaskController::class, 'readyForTesting'])->name('task.readyForTesting');
             Route::get('/detail/{id}',[TaskController::class,'detail'])->name('task.detail');
-            Route::get('/filter', [TaskController::class, 'filterTasks'])->name('task.filter');
+            // Route::get('/filter', [TaskController::class, 'filterTasks'])->name('task.filter');
 
             });
 
