@@ -53,7 +53,7 @@
                         @endforeach
                     </select>
                     <label for="type">Type:</label>
-<select name="type" id="type" class="form-control">
+{{-- <select name="type" id="type" class="form-control"> --}}
 
     {{-- @foreach ($types as $type)
         <option value="{{ $type }}">{{ ucfirst($type) }}</option>
@@ -66,7 +66,7 @@
 </select>
 
 <label for="priority">Priority: </label>
-<select class="form-control" name="priority" id="priority">
+{{-- <select class="form-control" name="priority" id="priority"> --}}
 
     {{-- @foreach ($priorities as $priority)
         <option value="{{ $priority }}">{{ ucfirst($priority) }}</option>
