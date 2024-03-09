@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Constants\TaskPriority;
+use App\Constants\TaskStatus;
+use App\Constants\TaskType;
 use App\Models\ActivityLog;
 use App\Models\Notification;
 use App\Models\Project;
@@ -17,22 +20,32 @@ public function __construct()
 {
     $this->middleware('auth');
 }
-// function gettask($id){
-//     return Project::find($id);
-
-//  }
-// public function task($fid)
-// {
-
-//     $project=Project::find($fid);
-//     $tasks=Task::where('project_id',$fid)->get();
-//     return view('admin.task.taskindex',compact('tasks','project','fid'));
 
 
-// }
+private function getDynamicOptions()
+{
+    return [
+        'status' => [
+            TaskStatus::TO_DO,
+            TaskStatus::IN_PROGRESS,
+            TaskStatus::IN_REVIEW,
+            TaskStatus::COMPLETED
+        ],
+        'types' => [
+            TaskType::NORMAL,
+            TaskType::IMPROVEMENT,
+            TaskType::BUG
+        ],
+        'priorities' => [
+            TaskPriority::HIGHEST,
+            TaskPriority::NORMAL,
+            TaskPriority::LOWEST
+        ]
+    ];
+}
 public function task($fid)
 {
-    // Get the project based on the provided ID
+
     $project = Project::find($fid);
 
 
@@ -51,8 +64,10 @@ public function task($fid)
                      ->where('assign_to', $userId)
                      ->get();
     }
-
-    return view('admin.task.taskindex', compact('tasks', 'project', 'fid'));
+    $projectUsers = ProjectUser::where('project_id', $fid)->pluck('user_id');
+    $teamMembers = User::whereIn('id', $projectUsers)->get();
+    $dynamicOptions = $this->getDynamicOptions();
+    return view('admin.task.taskindex', compact('tasks', 'project', 'fid','dynamicOptions','teamMembers'));
 }
 public function create ($fid)
     {
@@ -61,11 +76,16 @@ public function create ($fid)
 
         $project=Project::find($fid);
 
+        $dynamicOptions = $this->getDynamicOptions();
     $projectUsers = ProjectUser::where('project_id', $fid)->pluck('user_id');
     $teamMembers = User::whereIn('id', $projectUsers)->get();
-        // $teamMembers = User::get();
 
-        return view('admin.task.taskcreate',compact('tasks','teamMembers','projectUsers','fid','project'));
+        // $teamMembers = User::get();
+     $taskCreators = Task::where('project_id', $fid)->pluck('task_created_by')->unique();
+
+     $creators = User::whereIn('id', $taskCreators)->get();
+
+        return view('admin.task.taskcreate',compact('tasks','teamMembers','projectUsers','fid','creators','project','dynamicOptions'));
 
     }
     // public function store(Request $request,$fid)
@@ -108,7 +128,9 @@ public function create ($fid)
         'title' => 'required',
         'description' => 'required',
         'due_date' => 'required|date',
-        'status' => 'required|in:assign,in_progress,testing,completed',
+        'status' => 'required|in:' . implode(',', array_keys(TaskStatus::getStatusOptions())),
+        'type' => 'required|in:' . implode(',', array_keys(TaskType::getTypeOptions())),
+        'priority' => 'required|in:' . implode(',', array_keys(TaskPriority::getPriorityOptions())),
     ]);
 
     // Create a new Task instance and fill it with the validated data
@@ -118,7 +140,11 @@ public function create ($fid)
     $task->title = $request->input('title');
     $task->description = $request->input('description');
     $task->due_date = $request->input('due_date');
-    $task->status = $request->input('status', 'assign');
+    // $task->status = $request->input('status', 'assign');
+    $task->status = $request->input('status');
+    $task->type = $request->input('type');
+    $task->priority = $request->input('priority');
+    $task->task_created_by = auth()->user()->id;
     $task->save();
 
     // Create a notification for the user
@@ -142,8 +168,11 @@ public function create ($fid)
             abort(403, 'Unauthorized action.');
         }
          $teamMembers = User::get();
+         $status = array_keys(TaskStatus::getStatusOptions());
+    $types= array_keys(TaskType::getTypeOptions());
+    $priorities = array_keys(TaskPriority::getPriorityOptions());
 
-      return view('admin.task.taskcreate',compact('tasks','project','fid','teamMembers'));
+      return view('admin.task.taskcreate',compact('tasks','project','fid','teamMembers', 'status', 'types', 'priorities'));
 
     }
     public function update(Request $request,$fid, $id)
@@ -153,14 +182,23 @@ public function create ($fid)
 
         $tasks = Task::findOrFail($id);
 
-
+        $request->validate([
+            'status' => 'required|in:' . implode(',', array_keys(TaskStatus::getStatusOptions())),
+            'type' => 'required|in:' . implode(',', array_keys(TaskType::getTypeOptions())),
+            'priority' => 'required|in:' . implode(',', array_keys(TaskPriority::getPriorityOptions())),
+            'title' => 'required',
+            'description' => 'required',
+            'due_date' => 'required|date',
+            'assign_to' => 'required',
+        ]);
 
         $tasks->update([
             'status' => $request->input('status'),
+            'type' => $request->input('type'),
+            'priority' => $request->input('priority'),
             'title' => $request->input('title'),
             'description' => $request->input('description'),
             'due_date' => $request->input('due_date'),
-
         ]);
 
 
@@ -241,5 +279,82 @@ public function detail($fid, $id)
 
     return view('admin.task.detail', compact('task', 'fid', 'activityLogs'));
 }
+
+
+
+public function filterTasks(Request $request,$fid)
+{
+    // $fid = $request->fid;
+    $query = Task::where('project_id', $fid);
+    // dd($request->all());
+
+    // it also check 'null check'
+    if ($priority = $request->priority) {
+        $query->where('priority', $priority);
+    }
+
+    if ($created_by=$request->created_by) {
+        $query->where('task_created_by', $created_by);
+    }
+
+    if ($assign_to=$request->assign_to) {
+        $query->where('assign_to', $assign_to);
+    }
+
+    if ($status=$request->status) {
+        $query->where('status', $status);
+    }
+
+
+    $tasks = $query->get();
+    $dynamicOptions = $this->getDynamicOptions();
+    $projectUsers = ProjectUser::where('project_id', $fid)->pluck('user_id');
+    $teamMembers = User::whereIn('id', $projectUsers)->get();
+
+
+
+
+    return view('admin.task.taskindex',  compact('tasks', 'fid', 'dynamicOptions', 'teamMembers'));
+}
+// public function detail(Request $request, $fid, $id = null)
+// {
+//     if ($id) {
+//         // If $id is provided, try to find the task
+//         $task = Task::find($id);
+//         if (!$task) {
+//             return redirect()->back()->with('error', 'Task not found.');
+//         }
+
+//         $activityLogs = ActivityLog::where('task_id', $id)->orderBy('created_at', 'desc')->get();
+//         return view('admin.task.detail', compact('task', 'fid', 'activityLogs'));
+//     } else {
+//         // If $id is null, perform task filtering
+//         $query = Task::where('project_id', $fid);
+
+//         if ($priority = $request->priority) {
+//             $query->where('priority', $priority);
+//         }
+
+//         if ($created_by = $request->created_by) {
+//             $query->where('task_created_by', $created_by);
+//         }
+
+//         if ($assign_to = $request->assign_to) {
+//             $query->where('assign_to', $assign_to);
+//         }
+
+//         if ($status = $request->status) {
+//             $query->where('status', $status);
+//         }
+
+//         $task = $query->get();
+//         $dynamicOptions = $this->getDynamicOptions();
+//         $projectUsers = ProjectUser::where('project_id', $fid)->pluck('user_id');
+//         $teamMembers = User::whereIn('id', $projectUsers)->get();
+
+//         return view('admin.task.taskindex', compact('task', 'fid', 'dynamicOptions', 'teamMembers'));
+//     }
+// }
+
 
 }

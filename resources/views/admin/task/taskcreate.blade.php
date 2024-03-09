@@ -1,8 +1,6 @@
 @extends('layouts.masterback')
 @section('content')
-@php
-    use App\Constants\TaskStatus;
-@endphp
+
 <div class="container">
     @if(Session::has('error'))
     <div class="alert alert-danger alert-dismissible fade show">
@@ -38,32 +36,51 @@
         </select>
 
 
-    </div>
+
 
 
 <label for="status">Task Status:</label>
+
                      {{-- <select name="status" id="status" class="form-control">
-                        <option value="assign">Assign</option>
-                         <option value="in_progress">In Progress</option>
-                         <option value="testing">Testing</option>
-                          <option value="completed">Completed</option>
 
-
-                     </select> --}}
-                     <select name="status" class="form-control">
-                        @foreach ([
-                            TaskStatus::TO_DO,
-                            TaskStatus::IN_PROGRESS,
-                            TaskStatus::IN_REVIEW,
-                            TaskStatus::COMPLETED
-                        ] as $status)
+                        @foreach ($status as $status)
+                            <option value="{{ $status }}">{{ ucfirst($status) }}</option>
+                        @endforeach
+                    </select> --}}
+                    <select name="status" class="form-control">
+                        @foreach ($dynamicOptions['status'] as $status)
                             <option value="{{ $status }}">{{ $status }}</option>
                         @endforeach
                     </select>
+                    <label for="type">Type:</label>
+<select name="type" id="type" class="form-control">
+
+    {{-- @foreach ($types as $type)
+        <option value="{{ $type }}">{{ ucfirst($type) }}</option>
+    @endforeach
+</select> --}}
+<select name="type" id="type" class="form-control">
+    @foreach ($dynamicOptions['types'] as $type)
+        <option value="{{ $type }}">{{ ucfirst($type) }}</option>
+    @endforeach
+</select>
+
+<label for="priority">Priority: </label>
+<select class="form-control" name="priority" id="priority">
+
+    {{-- @foreach ($priorities as $priority)
+        <option value="{{ $priority }}">{{ ucfirst($priority) }}</option>
+    @endforeach --}}
+    <select name="priority" id="priority" class="form-control">
+        @foreach ($dynamicOptions['priorities'] as $priority)
+            <option value="{{ $priority }}">{{ ucfirst($priority) }}</option>
+        @endforeach
+    </select>
+</select>
 
         <button class="btn btn-success mt-4 float-end mb-4" type="submit"><i class="fa fa-check-circle"
             style="font-size:25px; color: rgb(43, 255, 43);"></i> <span>SAVE</span></button>
     </form>
 </div>
-
+</div>
 @endsection
