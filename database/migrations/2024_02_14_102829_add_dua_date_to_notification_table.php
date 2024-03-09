@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('notifications', function (Blueprint $table) {
-            $table->dateTime('due_date')->nullable();
+            // $table->dateTime('due_date')->nullable();
             $table->dateTime('creation_date')->nullable();
         });
     }
