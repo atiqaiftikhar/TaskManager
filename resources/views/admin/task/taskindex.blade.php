@@ -97,6 +97,8 @@
                 <td><a class="btn btn-info btn-sm"
                     href="{{ route('task.detail', ['id' => $task->id,'fid'=>$fid]) }}"> Task Detail</a></td>
 
+                    <td> <a class="btn btn-dark btn-sm" href="{{ route('module.index', ['tid' => $task->id]) }}">Module</a></td>
+
                  <td>
                     <a class="btn btn-primary btn-sm"
                      href="{{ route('task.edit', ['id' => $task->id,'fid'=>$fid]) }}"><i class="fa fa-edit"></i>Edit</a>

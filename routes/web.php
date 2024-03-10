@@ -5,6 +5,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\FeatureController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ModuleController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TaskController;
@@ -65,7 +66,6 @@ Route::group(['prefix'=>'admin'],function(){
         });
 
 
-        // Route::group(['prefix' => '/task'], function() {
             Route::group(['prefix' => '/task/{fid}'], function() {
             Route::get('/',[TaskController::class,'task'])->name('task.index');
             Route::get('/create',[TaskController::class,'create'])->name('task.create');
@@ -78,6 +78,22 @@ Route::group(['prefix'=>'admin'],function(){
             // Route::get('/filter', [TaskController::class, 'filterTasks'])->name('task.filter');
 
             });
+
+
+             Route::group(['prefix' => '/module/{tid}'], function() {
+                // Route::group(['prefix' => '/module'], function() {
+                Route::get('/',[ModuleController::class,'module'])->name('module.index');
+                Route::get('/create',[ModuleController::class,'create'])->name('module.create');
+                Route::post('/store',[ModuleController::class,'store'])->name('module.store');
+                Route::get('/edit/{id}',[ModuleController::class,'edit'])->name('module.edit');
+                Route::post('/update/{id}',[ModuleController::class,'update'])->name('module.update');
+                Route::get('/delete/{id}',[ModuleController::class,'delete'])->name('module.delete');
+
+
+                });
+
+
+
 
             Route::group(['prefix' => '/user'], function() {
                 Route::get('/',[UserController::class,'user'])->name('user.index');

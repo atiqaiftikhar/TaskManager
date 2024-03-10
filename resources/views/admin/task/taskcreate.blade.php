@@ -2,7 +2,7 @@
 @section('content')
 
 <div class="container">
-    @if(Session::has('error'))
+    {{-- @if(Session::has('error'))
     <div class="alert alert-danger alert-dismissible fade show">
         <strong>Failed!</strong> {{ Session::get('error') }}
         <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -10,7 +10,7 @@
         Session::forget('error');
         @endphp
     </div>
-    @endif
+    @endif --}}
     <form action="{{ isset($tasks) && $tasks->id  ? route('task.update', ['id' => $tasks->id, 'fid' => $fid]) : route('task.store', ['fid' => $fid]) }}" method="post">
 
         @csrf
@@ -53,12 +53,7 @@
                         @endforeach
                     </select>
                     <label for="type">Type:</label>
-{{-- <select name="type" id="type" class="form-control"> --}}
 
-    {{-- @foreach ($types as $type)
-        <option value="{{ $type }}">{{ ucfirst($type) }}</option>
-    @endforeach
-</select> --}}
 <select name="type" id="type" class="form-control">
     @foreach ($dynamicOptions['types'] as $type)
         <option value="{{ $type }}">{{ ucfirst($type) }}</option>
