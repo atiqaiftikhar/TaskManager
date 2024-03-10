@@ -8,6 +8,9 @@
         <div class="card mb-4">
           <div class="card-header pb-0">
             <h4>User Table</h4>
+            <div class=" container text-end">
+              <a href="{{ route('user.create') }}" class="btn btn-primary btn-sm mb-2 text-end">Add User</a>
+             </div>
           </div>
 
           <div class="card-body px-0 pt-0 pb-2">
@@ -18,7 +21,10 @@
                     <th class="text-uppercase text-primary text-xxs font-weight-bolder opacity-7">id</th>
                     <th class="text-uppercase text-primary text-xxs font-weight-bolder opacity-7 ps-2">Name</th>
                     <th class="text-uppercase text-primary text-xxs font-weight-bolder opacity-7 ps-2">Email</th>
+                    <th class="text-uppercase text-primary text-xxs font-weight-bolder opacity-7 ps-2  ">Password</th>
+                    <th class="text-uppercase text-primary text-xxs font-weight-bolder opacity-7 ps-2  ">Role</th>
                     <th class="text-uppercase text-primary text-xxs font-weight-bolder opacity-7 ps-2  ">Action</th>
+
 
 
 
@@ -31,7 +37,11 @@
                         <td>{{ $user->id }}</td>
                         <td>{{ $user->name }}</td>
                         <td>{{ $user->email }}</td>
+                        <td>{{ $user->password }}</td>
+            
                         <td>{{ $user->role }}</td>
+
+
 
                        <td><a class="btn btn-primary btn-sm"
                             href=""><i class="fa fa-edit"></i></a>

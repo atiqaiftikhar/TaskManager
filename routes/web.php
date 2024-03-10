@@ -8,6 +8,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ModuleController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\TaskViewController;
 use App\Http\Controllers\UserController;
@@ -43,6 +44,16 @@ Route::get('/projects/{id}', 'ProjectController@show')->name('projects.show');
 Route::group(['prefix'=>'admin'],function(){
 
     // Route::group(['middleware' => 'admin'], function () {
+        Route::group(['prefix'=>'/roles'], function(){
+            Route::get('/', [RoleController::class, 'index'])->name('roles.index');
+            Route::get('/create', [RoleController::class, 'create'])->name('roles.create');
+            Route::post('/store', [RoleController::class, 'store'])->name('roles.store');
+            Route::get('/edit/{id}', [RoleController::class, 'edit'])->name('roles.edit');
+            Route::post('/update/{id}', [RoleController::class, 'update'])->name('roles.update');
+            Route::get('/delete/{id}', [RoleController::class, 'delete'])->name('roles.delete');
+            });
+
+
 
     Route::group(['prefix' => '/project'], function() {
     Route::get('/',[ProjectController::class,'project'])->name('project.index');
@@ -96,7 +107,13 @@ Route::group(['prefix'=>'admin'],function(){
 
 
             Route::group(['prefix' => '/user'], function() {
-                Route::get('/',[UserController::class,'user'])->name('user.index');
+                Route::get('/',[UserController::class,'index'])->name('user.index');
+                Route::get('/create',[UserController::class,'create'])->name('user.create');
+                Route::post('/store',[UserController::class,'store'])->name('user.store');
+                Route::get('/edit/{id}',[UserController::class,'edit'])->name('user.edit');
+                Route::post('/update/{id}',[UserController::class,'update'])->name('user.update');
+                Route::get('/delete/{id}',[UserController::class,'delete'])->name('user.delete');
+
 
                 });
 
