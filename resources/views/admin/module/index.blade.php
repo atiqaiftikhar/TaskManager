@@ -1,3 +1,4 @@
+
 @extends('layouts.masterback')
 @section('content')
 @include('alert')
@@ -8,9 +9,11 @@
       <div class="col-12">
         <div class="card mb-4">
           <div class="card-header pb-0">
-            <h3>Tasks</h3>
+            <h3>Module</h3>
             <div class=" container text-end">
-                <a href="{{ route('module.create',$tid) }}" class="btn btn-success btn-sm mb-2 text-end">Add Module</a>
+
+                <a href="{{ route('module.create', ['tid' => $task->id]) }}" class="btn btn-success btn-sm">Create Module</a>
+
 
                </div>
           </div>
@@ -27,6 +30,7 @@
 
                     <th class="text-uppercase text-primary text-xxs font-weight-bolder opacity-7 ps-2  ">Created by</th>
 
+                    <th class="text-uppercase text-primary text-xxs font-weight-bolder opacity-7 ps-2  "></th>
 
 
                     <th class="text-uppercase text-primary text-xxs font-weight-bolder opacity-7 ps-2  ">Action</th>
@@ -44,12 +48,15 @@
             <td>{{$module->task->name}}</td>
             <td>{{ $module->name }}</td>
             <td>{{ $module->module_created_by }}</td>
+<td></td>
 
+
+<td>
 
                     <a class="btn btn-primary btn-sm"
-                     href="{{ route('module.edit', ['id' => $module->id,'tid'=>$tid]) }}"><i class="fa fa-edit"></i>Edit</a>
+                     href="{{ route('module.edit', ['id' => $module->id,'tid' => $task->id]) }}"><i class="fa fa-edit"></i>Edit</a>
 
-                    <a class="btn btn-danger btn-sm" href="{{ route('module.delete', ['id' => $module->id,'tid'=>$tid]) }}"><i class="fa fa-trash"></i>Delete</a>
+                    <a class="btn btn-danger btn-sm" href="{{ route('module.delete', ['id' => $module->id,'tid' => $task->id]) }}"><i class="fa fa-trash"></i>Delete</a>
                 </td>
         </tr>
         @endforeach

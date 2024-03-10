@@ -9,4 +9,8 @@ class Module extends Model
 {
     use HasFactory;
     protected $fillable = [ 'id','task_id','name','module_created_by'];
+    public function task()
+    {
+        return $this->belongsTo(Task::class);
+    }
 }
