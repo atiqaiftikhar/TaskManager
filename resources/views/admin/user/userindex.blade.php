@@ -39,8 +39,9 @@
                         <td>{{ $user->role }}</td>
 
                         <td><a class="btn btn-primary" href="{{ route('user.edit',['id'=>$user->id ]) }}"><i class="fa fa-edit"></i>Edit</a>
-                          <a class="btn btn-danger" href="{{ route('user.delete',['id'=>$user->id ]) }}" ><i class="fa fa-trash"></i>Delete</a></td>
-                      </tr>
+                          <a class="btn btn-danger" onclick="showDeleteModal({{ $user->id }})"  ref="{{ route('user.delete',['id'=>$user->id ]) }}"><i class="fa fa-trash"></i>Delete</a>
+
+                        </tr>
                     @endforeach
                 </tbody>
               </table>
@@ -49,4 +50,50 @@
         </div>
       </div>
     </div>
+
+    <div class="modal fade" id="deleteConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h5 class="modal-title" id="deleteConfirmationModalLabel">Delete User</h5>
+                  <button type="button" class="close" id="confirmDeleteBtn" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                
+              </div>
+              <div class="modal-body">
+                  Are you sure you want to delete this user?
+              </div>
+              <div class="modal-footer">
+                  <a  type="close" id="confirmDeleteBtn"  class="btn btn-secondary" data-dismiss="modal">Cancel</a>
+                  <a class="btn btn-primary" href="{{ route('user.delete',['id'=>$user->id ]) }}"><i class="fa fa-edit"></i>Delete</a>
+
+                </div>
+          </div>
+      </div>
+  </div>
+    
+
+  <script>
+  
+    function showDeleteModal(userId) {
+        
+        $('#deleteConfirmationModal').attr('data-user-id', userId);
+        
+        $('#deleteConfirmationModal').modal('show');
+    }
+
+    
+    $('.close').click(function() {
+        
+        var userId = $('#deleteConfirmationModal').attr('data-user-id');
+        
+        window.location.href = '/user/delete/' + userId;
+    });
+    $('#cancelDeleteBtn').click(function() {
+       
+        $('#deleteConfirmationModal').modal('hide');
+    });
+</script>
+
 @endsection

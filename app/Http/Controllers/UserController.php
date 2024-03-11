@@ -41,8 +41,10 @@ public function store(Request $request){
 public function edit($id){
 
     $users=User::find($id);
+    $roles=Role::get();
 
-    return view('admin.user.usercreate',compact('users'));
+
+    return view('admin.user.usercreate',compact('users','roles'));
 
 }
 public function update(Request $request,$id){
@@ -55,11 +57,16 @@ public function update(Request $request,$id){
     return redirect()->route('user.index');
 
 }
-public function delete($id){
+// 
+public function delete($id)
+{
 
-    $users=User::find($id);
-    $users->delete();
+    $user = User::find($id);
+    if (!$user) {
+        return redirect()->back()->with('error', 'User not found.');
+    }
+    $user->delete();
     return redirect()->route('user.index');
-
 }
+
 }
