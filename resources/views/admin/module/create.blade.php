@@ -9,10 +9,6 @@
     <label class="fw-bold">Module Title</label>
     <input type="text" required class="form-control" name="name" value="{{ $modules->name ?? '' }}" placeholder="">
 
-    <label class="fw-bold">Description</label>
-    <textarea required class="form-control" name="description" placeholder="">{{ $modules->description ?? '' }}</textarea>
-
-
 
 
     <label class="fw-bold" for="team_member">Select Team Member</label>

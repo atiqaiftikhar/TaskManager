@@ -78,6 +78,7 @@
                     <th class="text-uppercase text-primary text-xxs font-weight-bolder opacity-7 ps-2">Task Name</th>
 
                     <th class="text-uppercase text-primary text-xxs font-weight-bolder opacity-7 ps-2  "></th>
+                    <th class="text-uppercase text-primary text-xxs font-weight-bolder opacity-7 ps-2  "></th>
 
                     <th class="text-uppercase text-primary text-xxs font-weight-bolder opacity-7 ps-2  ">Action</th>
 
