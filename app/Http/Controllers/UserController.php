@@ -22,7 +22,9 @@ class UserController extends Controller
 public function create(){
 
     $users=new User();
+    
     $roles=Role::get();
+    // dd($roles);
 
     return view('admin.user.usercreate',compact('users','roles'));
 }

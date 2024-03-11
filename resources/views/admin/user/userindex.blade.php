@@ -21,7 +21,6 @@
                     <th class="text-uppercase text-primary text-xxs font-weight-bolder opacity-7">id</th>
                     <th class="text-uppercase text-primary text-xxs font-weight-bolder opacity-7 ps-2">Name</th>
                     <th class="text-uppercase text-primary text-xxs font-weight-bolder opacity-7 ps-2">Email</th>
-                    <th class="text-uppercase text-primary text-xxs font-weight-bolder opacity-7 ps-2  ">Password</th>
                     <th class="text-uppercase text-primary text-xxs font-weight-bolder opacity-7 ps-2  ">Role</th>
                     <th class="text-uppercase text-primary text-xxs font-weight-bolder opacity-7 ps-2  ">Action</th>
 
@@ -37,16 +36,11 @@
                         <td>{{ $user->id }}</td>
                         <td>{{ $user->name }}</td>
                         <td>{{ $user->email }}</td>
-                        <td>{{ $user->password }}</td>
-            
                         <td>{{ $user->role }}</td>
 
-
-
-                       <td><a class="btn btn-primary btn-sm"
-                            href=""><i class="fa fa-edit"></i></a>
-                                <a class="btn btn-danger btn-sm" href=""><i class="fa fa-trash"></i></a></td>
-                    </tr>
+                        <td><a class="btn btn-primary" href="{{ route('user.edit',['id'=>$user->id ]) }}"><i class="fa fa-edit"></i>Edit</a>
+                          <a class="btn btn-danger" href="{{ route('user.delete',['id'=>$user->id ]) }}" ><i class="fa fa-trash"></i>Delete</a></td>
+                      </tr>
                     @endforeach
                 </tbody>
               </table>

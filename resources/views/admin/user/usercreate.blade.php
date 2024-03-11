@@ -12,10 +12,6 @@
             <label for="email">Your Email:</label>
             <input type="email" class="form-control" id="email"  name="email" value="{{ $users->email }}"  required>
         </div>
-        <div class="mb-3 mt-3">
-            <label for="name">Password:</label>
-            <input type="password" class="form-control" id="password" value="{{ $users->password }}"   name="password" required>
-        </div>
 
         <div class="mb-3 mt-3">
             <div class="form-group">
@@ -23,7 +19,7 @@
                     <option  selected  value="{{ null }}"> -- Select Role --</option>
                     @foreach ($roles as $role)
                         <option value="{{ $role->id }}">{{ $role->role }}</option>
-                        @endforeach
+                    @endforeach
                 </select>
             </div>
 
