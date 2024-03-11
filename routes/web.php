@@ -7,6 +7,8 @@ use App\Http\Controllers\FeatureController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ModuleController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\PermissionCategoryController;
+use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\TaskController;
@@ -116,6 +118,31 @@ Route::group(['prefix'=>'admin'],function(){
 
 
                 });
+
+
+
+
+                    Route::group(['prefix' => '/permissioncategories'], function() {
+                        Route::get('/',[PermissionCategoryController::class,'category'])->name('permissioncategory.index');
+                        Route::get('/create',[PermissionCategoryController::class,'create'])->name('permissioncategory.create');
+                        Route::post('/store',[PermissionCategoryController::class,'store'])->name('permissioncategory.store');
+                        Route::get('/edit/{id}',[PermissionCategoryController::class,'edit'])->name('permissioncategory.edit');
+                        Route::post('/update/{id}',[PermissionCategoryController::class,'update'])->name('permissioncategory.update');
+                        Route::get('/delete/{id}',[PermissionCategoryController::class,'delete'])->name('permissioncategory.delete');
+                        });
+
+
+
+
+                Route::group(['prefix' => '/permission/{cid}'], function() {
+                    Route::get('/',[PermissionController::class,'permission'])->name('permission.index');
+                    Route::get('/create',[PermissionController::class,'create'])->name('permission.create');
+                    Route::post('/store',[PermissionController::class,'store'])->name('permission.store');
+                    Route::get('/edit/{id}',[PermissionController::class,'edit'])->name('permission.edit');
+                    Route::post('/update/{id}',[PermissionController::class,'update'])->name('permission.update');
+                    Route::get('/delete/{id}',[PermissionController::class,'delete'])->name('permission.delete');
+                    });
+
 
                 Route::group(['prefix' => '/notification'], function() {
                     // Route::get('/',[NotificationController::class,'index'])->name('notifications.index');
