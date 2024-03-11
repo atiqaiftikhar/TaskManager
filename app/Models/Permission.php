@@ -9,5 +9,9 @@ class Permission extends Model
 {
     use HasFactory;
     protected $fillable = [ 'id','title','permission','per_category_id' ];
+    public function category()
+    {
+        return $this->belongsTo(PermissionCategory::class);
+    }
 
 }

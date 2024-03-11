@@ -9,4 +9,8 @@ class PermissionCategory extends Model
 {
     use HasFactory;
     protected $fillable = [ 'id','name',];
+    public function permissions()
+    {
+        return $this->hasMany(Permission::class, 'per_category_id');
+    }
 }

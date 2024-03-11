@@ -11,6 +11,7 @@ use App\Http\Controllers\PermissionCategoryController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\RolePermissionController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\TaskViewController;
 use App\Http\Controllers\UserController;
@@ -143,6 +144,11 @@ Route::group(['prefix'=>'admin'],function(){
                     Route::get('/delete/{id}',[PermissionController::class,'delete'])->name('permission.delete');
                     });
 
+                    Route::group(['prefix' => '/rolepermission'], function() {
+                        Route::get('/',[RolePermissionController::class,'index'])->name('rolepermission.index');
+                        Route::get('/addrolepermission/{roleId}',[RolePermissionController::class,'addrolepermission'])->name('rolepermission.add');
+                        Route::post('/storerolepermission/{roleId}',[RolePermissionController::class,'store'])->name('rolepermission.store');
+                        });
 
                 Route::group(['prefix' => '/notification'], function() {
                     // Route::get('/',[NotificationController::class,'index'])->name('notifications.index');

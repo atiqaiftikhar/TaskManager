@@ -25,8 +25,10 @@
             <td>{{ $per->permission }}</td>
 
            <td><a class="btn btn-primary btn-sm"
-                href="{{ route('permission.edit', ['id' => $per->id]) }}"><i class="fa fa-edit"></i></a>
-                    <a class="btn btn-danger btn-sm" href="{{ route('permission.delete', ['id' => $per->id]) }}"><i class="fa fa-trash"></i></a></td>
+                href="{{ route('permission.edit', ['id' => $per->id,'cid' => $cid]) }}"><i class="fa fa-edit"></i></a>
+
+
+                    <a class="btn btn-danger btn-sm" href="{{ route('permission.delete', ['id' => $per->id,'cid' => $cid]) }}"><i class="fa fa-trash"></i></a></td>
         </tr>
         @endforeach
     </tbody>
