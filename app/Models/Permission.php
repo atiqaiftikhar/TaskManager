@@ -11,7 +11,7 @@ class Permission extends Model
     protected $fillable = [ 'id','title','permission','per_category_id' ];
     public function category()
     {
-        return $this->belongsTo(PermissionCategory::class);
+        return $this->belongsTo(PermissionCategory::class, 'per_category_id');
     }
 
 }

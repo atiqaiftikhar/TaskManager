@@ -59,10 +59,18 @@ class PermissionCategoryController extends Controller
 
         public function delete($id)
         {
-            $permission_category=PermissionCategory::find($id);
+            $permission_category = PermissionCategory::find($id);
 
-            $permission_category->delete();
+            if ($permission_category) {
 
-            return redirect()->back()->with('success', 'Category Deleted Successfully');
+                $permission_category->permissions()->delete();
+
+
+                $permission_category->delete();
+
+                return redirect()->back()->with('success', 'Category Deleted Successfully');
+            } else {
+                return redirect()->back()->with('error', 'Category not found');
+            }
         }
 }

@@ -23,18 +23,21 @@ class RolePermissionController extends Controller
 
     }
     public function addrolepermission($roleId)
-    {
+{
+    // Find the role and eager load its permissions
+    $role = Role::with('permissions')->findOrFail($roleId);
 
-     $role = Role::findOrFail($roleId);
-        $permissions = Permission::all();
+    // Get all permissions
+    $permissions = Permission::all();
 
-        $permissioncategory = PermissionCategory::with('permissions')->get();
+    // Get permission categories with their associated permissions
+    $permission_categories = PermissionCategory::with('permissions')->get();
 
+    // Extract the IDs of selected permissions for the role
+    $selectedPermissions = $role->permissions->pluck('id')->toArray();
 
-     return view('admin.rolepermission.create', compact('role', 'permissions','permissioncategory'));
-
-
-    }
+    return view('admin.rolepermission.create', compact('role', 'permissions', 'permission_categories', 'selectedPermissions'));
+}
     // public function store(Request $request, $roleId)
     // {
 

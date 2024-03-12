@@ -6,13 +6,18 @@
         @csrf
         <div class="mb-3">
             <label class="form-label">Select Permissions:</label>
-            @foreach ($permissioncategory as $category)
+            @foreach ($permission_categories as $category)
                 <h2>{{ $category->name }}</h2>
                 <ul>
                     @foreach ($category->permissions as $permission)
 
-                            <input type="checkbox" name="permissions[]" value="{{ $permission->id }}">
-                            <label>{{ $permission->title }}</label>
+                            {{-- <input type="checkbox" name="permissions[]" value="{{ $permission->id }}">
+                            <label>{{ $permission->title }}</label> --}}
+
+                                <input type="checkbox" name="permissions[]" value="{{ $permission->id }}"
+                                    {{ $role->permissions->contains($permission->id) ? 'checked' : '' }}>
+                                <label>{{ $permission->title }}</label>
+
 
                     @endforeach
                 </ul>

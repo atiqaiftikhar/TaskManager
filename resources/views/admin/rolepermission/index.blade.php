@@ -3,7 +3,6 @@
 @include('alert')
 <div class="container">
     <h1 class="text-center fw-bold">Role Permissions</h1>
-    {{-- @include('alert') --}}
 
 <table class="table table-bordered">
     <thead>
