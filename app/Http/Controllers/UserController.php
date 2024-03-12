@@ -58,7 +58,7 @@ public function update(Request $request,$id){
 
 }
 // 
-public function delete($id)
+    public function delete($id)
 {
 
     $user = User::find($id);
