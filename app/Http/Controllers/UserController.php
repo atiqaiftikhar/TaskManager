@@ -90,26 +90,16 @@ public function update(Request $request, $id){
 
     return redirect()->route('user.index')->with('success', 'User updated successfully');
 }
-// public function update(Request $request,$id){
 
-//     $users=User::find($id);
-    
-//     $data=$request->all();
-    
-//     $users->update($data);
-//     return redirect()->route('user.index');
+    public function delete($id)
+{
 
-// }
-
-//     public function delete($id)
-// {
-
-//     $user = User::find($id);
-//     if (!$user) {
-//         return redirect()->back()->with('error', 'User not found.');
-//     }
-//     $user->delete();
-//     return redirect()->route('user.index');
-// }
+    $user = User::find($id);
+    if (!$user) {
+        return redirect()->back()->with('error', 'User not found.');
+    }
+    $user->delete();
+    return redirect()->route('user.index');
+}
 
 }
