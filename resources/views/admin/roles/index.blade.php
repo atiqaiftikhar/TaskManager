@@ -16,6 +16,8 @@
         <tr>
             <th>#</th>
             <th>Role</th>
+            <th>Action</th>
+
             
         </tr>
     </thead>
@@ -25,6 +27,9 @@
         <tr>
             <td>{{ $role->id }}</td>
             <td>{{ $role->role }}</td>
+            <td><a class="btn btn-primary" href="{{ route('roles.edit',['id'=>$role->id ]) }}"><i class="fa fa-edit"></i>Edit</a>
+                <a class="btn btn-danger" href="{{ route('roles.delete',['id'=>$role->id ]) }}" ><i class="fa fa-trash"></i>Delete</a></td>
+            
         </tr>
         @endforeach
     </tbody>
