@@ -11,8 +11,7 @@
                 <ul>
                     @foreach ($category->permissions as $permission)
 
-                            {{-- <input type="checkbox" name="permissions[]" value="{{ $permission->id }}">
-                            <label>{{ $permission->title }}</label> --}}
+
 
                                 <input type="checkbox" name="permissions[]" value="{{ $permission->id }}"
                                     {{ $role->permissions->contains($permission->id) ? 'checked' : '' }}>
