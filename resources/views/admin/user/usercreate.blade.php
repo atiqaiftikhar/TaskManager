@@ -19,25 +19,16 @@
 
         <div class="mb-3 mt-3">
             <div class="form-group">
-                <select name="role"  class="form-control " >
-                    <option  selected  value="{{ null }}"> -- Select Role --</option>
-                    @foreach ($roles as $role)
+                <label for="role_id">Role:</label>
+                <select name="role" id="role_id" class="form-control">
+                    @foreach($roles as $role)
                         <option value="{{ $role->role }}">{{ $role->role }}</option>
-                        @endforeach
+                    @endforeach
                 </select>
             </div>
 
-            
 
 
-        {{-- @foreach($teamMembers as $member)
-    <div class="form-check">
-        <input class="form-check-input" type="checkbox" name="team_members[]" value="{{ $member->id }}" id="member_{{ $member->id }}">
-        <label class="form-check-label" for="member_{{ $member->id }}">
-            {{ $member->name }}
-        </label>
-    </div>
-@endforeach --}}
 
 
         <button class="btn btn-success mt-4 float-end mb-4" type="submit"><i class="fa fa-check-circle"
