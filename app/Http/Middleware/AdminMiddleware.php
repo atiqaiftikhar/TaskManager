@@ -14,24 +14,12 @@ class AdminMiddleware
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next): Response
+    public function handle($request, Closure $next)
     {
+        if ($request->user() && $request->user()->isAdmin()) {
+            return $next($request);
+        }
 
-        if ( Auth::check())
-            {
-
-                //admin role == 2
-                //user role == 1
-                $role=auth()->user()->role_id;
-                // dd(gettype($role));
-                if($role !== 2)
-                abort(403,"INVALID ACCESS");
-                //return redirect('home');
-
-            }
-            else{
-                return route('login');
-            }
-        return $next($request);
+        return redirect()->route('home')->with('error', 'You do not have permission to access this page.');
     }
 }
