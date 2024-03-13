@@ -8,10 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Task extends Model
 {
     use HasFactory;
-    protected $fillable = [ 'id','project_id','assign_to','title','description','status','due_date','task_created_by','type','priority'];
-    public function modules() {
-        return $this->hasMany(Module::class);
-    }
+    protected $fillable = [ 'id','project_id','assign_to','title','description','status','due_date','task_created_by','type','priority','module_id'];
+    // public function modules() {
+    //     return $this->hasMany(Module::class);
+    // }
 
 
     public function project()

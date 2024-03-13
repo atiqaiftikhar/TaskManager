@@ -12,7 +12,7 @@
             <h3>Module</h3>
             <div class=" container text-end">
 
-                <a href="{{ route('module.create', ['tid' => $task->id]) }}" class="btn btn-success btn-sm">Create Module</a>
+                <a href="{{ route('module.create', ['pid' => $project->id]) }}" class="btn btn-success btn-sm">Create Module</a>
 
 
                </div>
@@ -24,7 +24,7 @@
                 <thead>
                   <tr>
                     <th class="text-uppercase text-primary text-xxs font-weight-bolder opacity-7">id</th>
-                    <th class="text-uppercase text-primary text-xxs font-weight-bolder opacity-7 ps-2">Task Name</th>
+                    <th class="text-uppercase text-primary text-xxs font-weight-bolder opacity-7 ps-2">Project Name</th>
 
                     <th class="text-uppercase text-primary text-xxs font-weight-bolder opacity-7 ps-2">Module Name</th>
 
@@ -45,18 +45,18 @@
 
 
             <td>{{ $module->id }}</td>
-            <td>{{$module->task->name}}</td>
+            <td>{{$module->project->name}}</td>
             <td>{{ $module->name }}</td>
-            <td>{{ $module->module_created_by }}</td>
-<td></td>
+            <td>{{ $module->createdBy->name }}</td>
+            <td> <a class="btn btn-dark btn-sm" href="{{ route('task.index', ['mid' => $module->id]) }}">Task</a></td>
 
 
 <td>
 
                     <a class="btn btn-primary btn-sm"
-                     href="{{ route('module.edit', ['id' => $module->id,'tid' => $task->id]) }}"><i class="fa fa-edit"></i>Edit</a>
+                     href="{{ route('module.edit', ['id' => $module->id,'pid' => $project->id]) }}"><i class="fa fa-edit"></i>Edit</a>
 
-                    <a class="btn btn-danger btn-sm" href="{{ route('module.delete', ['id' => $module->id,'tid' => $task->id]) }}"><i class="fa fa-trash"></i>Delete</a>
+                    <a class="btn btn-danger btn-sm" href="{{ route('module.delete', ['id' => $module->id,'pid' => $project->id]) }}"><i class="fa fa-trash"></i>Delete</a>
                 </td>
         </tr>
         @endforeach

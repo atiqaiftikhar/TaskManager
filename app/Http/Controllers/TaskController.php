@@ -6,6 +6,7 @@ use App\Constants\TaskPriority;
 use App\Constants\TaskStatus;
 use App\Constants\TaskType;
 use App\Models\ActivityLog;
+use App\Models\Module;
 use App\Models\Notification;
 use App\Models\Project;
 use App\Models\ProjectUser;
@@ -69,70 +70,178 @@ private function getDynamicOptions()
 //     $dynamicOptions = $this->getDynamicOptions();
 //     return view('admin.task.taskindex', compact('tasks', 'project', 'fid','dynamicOptions','teamMembers'));
 // }
-public function task($fid, Request $request)
-{
-    $query = Task::where('project_id', $fid);
+// public function task($mid, Request $request)
+// {
+//     // $query = Task::where('project_id', $mid);
+//     $query = Task::where('module_id', $mid);
+//     if ($priority = $request->priority) {
+//         $query->where('priority', $priority);
+//     }
 
+//     if ($task_created_by = $request->task_created_by) {
+//         $query->where('task_created_by', $task_created_by);
+//     }
+
+//     if ($assign_to = $request->assign_to) {
+//         $query->where('assign_to', $assign_to);
+//     }
+
+//     if ($status = $request->status) {
+//         $query->where('status', $status);
+//     }
+
+
+//     $createdByUserIds = Task::where('project_id', $mid)
+//                             ->distinct('task_created_by')
+//                             ->pluck('task_created_by');
+//     $createdByUsers = User::whereIn('id', $createdByUserIds)->get();
+
+//     $userId = Auth::id();
+//     $userRoleId = Auth::user()->role_id;
+
+//     if ($userRoleId == 2) {
+//         $tasks = $query->get();
+//     } else {
+//         $tasks = $query->where('assign_to', $userId)->get();
+//     }
+
+//     $project = Project::find($mid);
+//     $projectUsers = ProjectUser::where('project_id', $mid)->pluck('user_id');
+//     $teamMembers = User::whereIn('id', $projectUsers)->get();
+//     $dynamicOptions = $this->getDynamicOptions();
+
+//     return view('admin.task.taskindex', compact('tasks', 'project', 'fid', 'dynamicOptions', 'teamMembers','createdByUsers'));
+// }
+public function task($mid, Request $request)
+{
+    // Construct the base query for tasks associated with the module
+    $query = Task::where('module_id', $mid);
+
+    // Apply filters based on request parameters
     if ($priority = $request->priority) {
         $query->where('priority', $priority);
     }
 
-    if ($task_created_by = $request->task_created_by) {
-        $query->where('task_created_by', $task_created_by);
+    if ($taskCreatedBy = $request->task_created_by) {
+        $query->where('task_created_by', $taskCreatedBy);
     }
 
-    if ($assign_to = $request->assign_to) {
-        $query->where('assign_to', $assign_to);
+    if ($assignTo = $request->assign_to) {
+        $query->where('assign_to', $assignTo);
     }
 
     if ($status = $request->status) {
         $query->where('status', $status);
     }
 
-
-    $createdByUserIds = Task::where('project_id', $fid)
+    // Retrieve the list of user IDs who created tasks in the module's project
+    $createdByUserIds = Task::where('module_id', $mid)
                             ->distinct('task_created_by')
                             ->pluck('task_created_by');
+
+    // Retrieve users who created tasks in the module's project
     $createdByUsers = User::whereIn('id', $createdByUserIds)->get();
-
     $userId = Auth::id();
-    $userRoleId = Auth::user()->role_id;
+        $userRoleId = Auth::user()->role_id;
 
-    if ($userRoleId == 2) {
-        $tasks = $query->get();
-    } else {
-        $tasks = $query->where('assign_to', $userId)->get();
-    }
+        if ($userRoleId == 2) {
+            $tasks = $query->get();
+        } else {
+            $tasks = $query->where('assign_to', $userId)->get();
+        }
+    // Retrieve the module and its associated project
+    $module = Module::findOrFail($mid);
+    $project = Project::findOrFail($module->project_id);
 
-    $project = Project::find($fid);
-    $projectUsers = ProjectUser::where('project_id', $fid)->pluck('user_id');
-    $teamMembers = User::whereIn('id', $projectUsers)->get();
+    // Retrieve team members associated with the project
+    $teamMembers = User::whereIn('id', function ($query) use ($project) {
+        $query->select('user_id')
+              ->from('project_users')
+              ->where('project_id', $project->id);
+    })->get();
+
+    // Dynamic options might need to be fetched from a separate method
     $dynamicOptions = $this->getDynamicOptions();
 
-    return view('admin.task.taskindex', compact('tasks', 'project', 'fid', 'dynamicOptions', 'teamMembers','createdByUsers'));
+    // Return the view with the retrieved data
+    return view('admin.task.taskindex', compact('tasks', 'mid', 'dynamicOptions', 'teamMembers', 'createdByUsers'));
 }
 
-public function create ($fid)
-    {
+// public function create ($fid)
+//     {
 
-        $tasks= new Task();
+//         $tasks= new Task();
 
-        $project=Project::find($fid);
+//         $project=Project::find($fid);
 
-        $dynamicOptions = $this->getDynamicOptions();
-    $projectUsers = ProjectUser::where('project_id', $fid)->pluck('user_id');
-    $teamMembers = User::whereIn('id', $projectUsers)->get();
+//         $dynamicOptions = $this->getDynamicOptions();
+//     $projectUsers = ProjectUser::where('project_id', $fid)->pluck('user_id');
+//     $teamMembers = User::whereIn('id', $projectUsers)->get();
 
-        // $teamMembers = User::get();
-     $taskCreators = Task::where('project_id', $fid)->pluck('task_created_by')->unique();
+//         // $teamMembers = User::get();
+//      $taskCreators = Task::where('project_id', $fid)->pluck('task_created_by')->unique();
 
-     $creators = User::whereIn('id', $taskCreators)->get();
+//      $creators = User::whereIn('id', $taskCreators)->get();
 
-        return view('admin.task.taskcreate',compact('tasks','teamMembers','projectUsers','fid','creators','project','dynamicOptions'));
+//         return view('admin.task.taskcreate',compact('tasks','teamMembers','projectUsers','fid','creators','project','dynamicOptions'));
 
-    }
+//     }
+public function create($mid)
+{
+    $tasks = new Task();
+    $module = Module::findOrFail($mid);
+    $project = Project::findOrFail($module->project_id);
+    $teamMembers = User::whereIn('id', $project->users()->pluck('user_id'))->get();
+    $taskCreators = Task::where('module_id', $mid)->pluck('task_created_by')->unique();
+    $creators = User::whereIn('id', $taskCreators)->get();
+    $dynamicOptions = $this->getDynamicOptions();
 
-    public function store(Request $request, $fid)
+    return view('admin.task.taskcreate', compact('tasks', 'teamMembers', 'creators', 'module', 'project', 'dynamicOptions','mid'));
+}
+
+//     public function store(Request $request, $mid)
+// {
+//     // Validate the incoming request data
+//     $request->validate([
+//         'assign_to' => 'required',
+//         'title' => 'required',
+//         'description' => 'required',
+//         'due_date' => 'required|date',
+//         'status' => 'required|in:' . implode(',', array_keys(TaskStatus::getStatusOptions())),
+//         'type' => 'required|in:' . implode(',', array_keys(TaskType::getTypeOptions())),
+//         'priority' => 'required|in:' . implode(',', array_keys(TaskPriority::getPriorityOptions())),
+//     ]);
+
+//     // Create a new Task instance and fill it with the validated data
+//     $task = new Task();
+//     $task->assign_to = $request->input('assign_to');
+//     // $task->project_id = $fid;
+//     $task->module_id = $mid;
+//     $task->title = $request->input('title');
+//     $task->description = $request->input('description');
+//     $task->due_date = $request->input('due_date');
+//     // $task->status = $request->input('status', 'assign');
+//     $task->status = $request->input('status');
+//     $task->type = $request->input('type');
+//     $task->priority = $request->input('priority');
+//     $task->task_created_by = auth()->user()->id;
+//     $task->save();
+
+//     // Create a notification for the user
+//     Notification::create([
+//         'user_id' => auth()->user()->id,
+//         'task_id' => $task->id,
+//         'message' => 'You have been assigned a new task: ' . $task->title,
+//         'creation_date' => now(),
+//         'due_date' => $task->due_date,
+//         'is_read' => false
+//     ]);
+
+//     return redirect()->route('task.index', ['mid' => $mid])->with('success', 'Task Added Successfully');
+// }
+
+
+public function store(Request $request, $mid)
 {
     // Validate the incoming request data
     $request->validate([
@@ -145,117 +254,197 @@ public function create ($fid)
         'priority' => 'required|in:' . implode(',', array_keys(TaskPriority::getPriorityOptions())),
     ]);
 
-    // Create a new Task instance and fill it with the validated data
-    $task = new Task();
-    $task->assign_to = $request->input('assign_to');
-    $task->project_id = $fid;
-    $task->title = $request->input('title');
-    $task->description = $request->input('description');
-    $task->due_date = $request->input('due_date');
-    // $task->status = $request->input('status', 'assign');
-    $task->status = $request->input('status');
-    $task->type = $request->input('type');
-    $task->priority = $request->input('priority');
-    $task->task_created_by = auth()->user()->id;
-    $task->save();
+    // Retrieve the module associated with the task
+    $modules = Module::findOrFail($mid);
 
-    // Create a notification for the user
+    // Create a new Task instance and fill it with the validated data
+    $tasks = new Task();
+    $tasks->assign_to = $request->input('assign_to');
+    $tasks->module_id = $mid;
+    $tasks->project_id = $modules->project_id; // Assign project ID from module
+    $tasks->title = $request->input('title');
+    $tasks->description = $request->input('description');
+    $tasks->due_date = $request->input('due_date');
+    $tasks->status = $request->input('status');
+    $tasks->type = $request->input('type');
+    $tasks->priority = $request->input('priority');
+    $tasks->task_created_by = auth()->user()->id;
+    $tasks->save();
+
+
     Notification::create([
         'user_id' => auth()->user()->id,
-        'task_id' => $task->id,
-        'message' => 'You have been assigned a new task: ' . $task->title,
+        'task_id' => $tasks->id,
+        'message' => 'You have been assigned a new task: ' . $tasks->title,
         'creation_date' => now(),
-        'due_date' => $task->due_date,
+        'due_date' => $tasks->due_date,
         'is_read' => false
     ]);
 
-    return redirect()->route('task.index', ['fid' => $fid])->with('success', 'Task Added Successfully');
+    return redirect()->route('task.index', ['mid' => $mid])->with('success', 'Task Added Successfully');
 }
-    public function edit($fid,$id)
-    {
 
-        $tasks = Task::findOrFail($id);
+    // public function edit($mid,$id)
+    // {
 
-        // Check authorization
-        $projectId = $tasks->project_id;
-        $project = Project::findOrFail($projectId);
+    //     $tasks = Task::findOrFail($id);
+
+    //     // Check authorization
+    //     $projectId = $tasks->project_id;
+    //     $project = Project::findOrFail($projectId);
+
+    //     if (Auth::id() !== $project->created_by && Auth::id() !== $tasks->task_created_by) {
+    //         // User is not authorized to edit this task
+    //         return redirect()->back()->with('error', 'You are not authorized to edit this task.');
+    //     }
+    //      $teamMembers = User::get();
+    //      $status = array_keys(TaskStatus::getStatusOptions());
+    // $types= array_keys(TaskType::getTypeOptions());
+    // $priorities = array_keys(TaskPriority::getPriorityOptions());
+    // $dynamicOptions = $this->getDynamicOptions();
+
+    //   return view('admin.task.taskcreate',compact('tasks','project','fid','teamMembers', 'status', 'types', 'priorities','dynamicOptions'));
+
+    // }
+    public function edit($mid, $id)
+{
+    $tasks = Task::findOrFail($id);
+    $module = Module::findOrFail($mid);
+    $project = Project::findOrFail($module->project_id);
 
         if (Auth::id() !== $project->created_by && Auth::id() !== $tasks->task_created_by) {
             // User is not authorized to edit this task
             return redirect()->back()->with('error', 'You are not authorized to edit this task.');
         }
-         $teamMembers = User::get();
-         $status = array_keys(TaskStatus::getStatusOptions());
-    $types= array_keys(TaskType::getTypeOptions());
+
+    $teamMembers = User::whereIn('id', $project->users()->pluck('user_id'))->get();
+    $status = array_keys(TaskStatus::getStatusOptions());
+    $types = array_keys(TaskType::getTypeOptions());
     $priorities = array_keys(TaskPriority::getPriorityOptions());
     $dynamicOptions = $this->getDynamicOptions();
 
-      return view('admin.task.taskcreate',compact('tasks','project','fid','teamMembers', 'status', 'types', 'priorities','dynamicOptions'));
+    return view('admin.task.taskcreate', compact('tasks', 'teamMembers', 'status', 'types', 'priorities', 'module', 'project', 'dynamicOptions','mid'));
+}
+    // public function update(Request $request,$mid, $id)
+    // {
 
-    }
-    public function update(Request $request,$fid, $id)
+
+
+    //     $tasks = Task::findOrFail($id);
+
+    //     $request->validate([
+    //         'status' => 'required|in:' . implode(',', array_keys(TaskStatus::getStatusOptions())),
+    //         'type' => 'required|in:' . implode(',', array_keys(TaskType::getTypeOptions())),
+    //         'priority' => 'required|in:' . implode(',', array_keys(TaskPriority::getPriorityOptions())),
+    //         'title' => 'required',
+    //         'description' => 'required',
+    //         'due_date' => 'required|date',
+    //         'assign_to' => 'required',
+    //     ]);
+
+    //     $tasks->update([
+    //         'status' => $request->input('status'),
+    //         'type' => $request->input('type'),
+    //         'priority' => $request->input('priority'),
+    //         'title' => $request->input('title'),
+    //         'description' => $request->input('description'),
+    //         'due_date' => $request->input('due_date'),
+    //     ]);
+
+
+    //     // $assign_to = $request->input('assign_to');
+    //     // // dd($assign_to);
+    //     // // ProjectUser::where('project_id', $fid)->update(['user_id' => $assign_to]);
+    //     // // dd($assign_to);
+    //     // ProjectUser::where('project_id', $fid)
+    //     // ->where('user_id', $assign_to)
+    //     // ->update(['user_id' => $assign_to]);
+    //     // Retrieve the new assigned user ID from the request
+    // $newAssigneeId = $request->input('assign_to');
+
+    // // Remove the previous assignment and assign the new user to the task
+    // ProjectUser::where('project_id', $mid)
+    //     ->where('id', $id)
+    //     ->update(['user_id' => $newAssigneeId]);
+    //     $dynamicOptions = $this->getDynamicOptions();
+
+
+    //     return redirect()->route('task.index',['mid' => $mid])->with('success', 'Task Updated Successfully');
+    // }
+    public function update(Request $request, $mid, $id)
     {
-
-
-
-        $tasks = Task::findOrFail($id);
-
+        // Validate the incoming request data
         $request->validate([
-            'status' => 'required|in:' . implode(',', array_keys(TaskStatus::getStatusOptions())),
-            'type' => 'required|in:' . implode(',', array_keys(TaskType::getTypeOptions())),
-            'priority' => 'required|in:' . implode(',', array_keys(TaskPriority::getPriorityOptions())),
+            'assign_to' => 'required',
             'title' => 'required',
             'description' => 'required',
             'due_date' => 'required|date',
-            'assign_to' => 'required',
+            'status' => 'required|in:' . implode(',', array_keys(TaskStatus::getStatusOptions())),
+            'type' => 'required|in:' . implode(',', array_keys(TaskType::getTypeOptions())),
+            'priority' => 'required|in:' . implode(',', array_keys(TaskPriority::getPriorityOptions())),
         ]);
 
-        $tasks->update([
-            'status' => $request->input('status'),
-            'type' => $request->input('type'),
-            'priority' => $request->input('priority'),
+        // Retrieve the task by its ID
+        $task = Task::findOrFail($id);
+
+        // Retrieve the module associated with the task
+        $module = Module::findOrFail($mid);
+
+        // Check if the user is authorized to update the task
+        $project = Project::findOrFail($module->project_id);
+        if (!(Auth::id() === $project->created_by || Auth::id() === $task->task_created_by)) {
+            return redirect()->back()->with('error', 'You are not authorized to update this task.');
+        }
+
+        // Update the task with the new data
+        $task->update([
+            'assign_to' => $request->input('assign_to'),
             'title' => $request->input('title'),
             'description' => $request->input('description'),
             'due_date' => $request->input('due_date'),
+            'status' => $request->input('status'),
+            'type' => $request->input('type'),
+            'priority' => $request->input('priority'),
         ]);
 
-
-        // $assign_to = $request->input('assign_to');
-        // // dd($assign_to);
-        // // ProjectUser::where('project_id', $fid)->update(['user_id' => $assign_to]);
-        // // dd($assign_to);
-        // ProjectUser::where('project_id', $fid)
-        // ->where('user_id', $assign_to)
-        // ->update(['user_id' => $assign_to]);
-        // Retrieve the new assigned user ID from the request
-    $newAssigneeId = $request->input('assign_to');
-
-    // Remove the previous assignment and assign the new user to the task
-    ProjectUser::where('project_id', $fid)
-        ->where('id', $id)
-        ->update(['user_id' => $newAssigneeId]);
-        $dynamicOptions = $this->getDynamicOptions();
-
-
-        return redirect()->route('task.index',['fid' => $fid])->with('success', 'Task Updated Successfully');
+        // Redirect back to the task index page with a success message
+        return redirect()->route('task.index', ['mid' => $mid])->with('success', 'Task Updated Successfully');
     }
 
 
-    public function delete($fid, $id)
-    {
-        $tasks=Task::find($id);
-        $project = $tasks->project;
+public function delete($mid, $id)
+{
+    // Find the task by its ID
+    $task = Task::findOrFail($id);
 
-
-        if (Auth::id() !== $project->created_by) {
-            abort(403, 'Unauthorized action.');
-        }
-
-
-        $tasks->delete();
-
-        return redirect()->back()->with('success', 'Task Deleted Successfully');
+    // Ensure that the task belongs to the specified module
+    if ($task->module_id != $mid) {
+        abort(403, 'Unauthorized action.'); // Return a 403 Forbidden response if the task doesn't belong to the module
     }
+
+    // Delete the task
+    $task->delete();
+
+    // Redirect back to the previous page with a success message
+    return redirect()->back()->with('success', 'Task Deleted Successfully');
+}
+
+
+    // public function delete($mid, $id)
+    // {
+    //     $tasks=Task::find($id);
+    //     $project = $tasks->project;
+
+
+    //     if (Auth::id() !== $project->created_by) {
+    //         abort(403, 'Unauthorized action.');
+    //     }
+
+
+    //     $tasks->delete();
+
+    //     return redirect()->back()->with('success', 'Task Deleted Successfully');
+    // }
 
 
     public function readyForTesting(Request $request, $id)
@@ -290,14 +479,14 @@ public function create ($fid)
 }
 
 }
-public function detail($fid, $id)
+public function detail($mid, $id)
 {
 
     $task = Task::find($id);
     // $task = Task::with('assignedTo')->find($id);
     $activityLogs = ActivityLog::where('task_id', $id)->orderBy('created_at', 'desc')->get();
 
-    return view('admin.task.detail', compact('task', 'fid', 'activityLogs'));
+    return view('admin.task.detail', compact('task', 'mid', 'activityLogs'));
 }
 
 

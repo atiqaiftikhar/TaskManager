@@ -1,6 +1,6 @@
 @extends('layouts.masterback')
 @section('content')
-<form action="{{ isset($modules) && $modules->id  ? route('module.update', ['id' => $modules->id, 'tid' => $tid]) : route('module.store', ['tid' => $tid]) }}" method="post">
+<form action="{{ isset($modules) && $modules->id  ? route('module.update', ['id' => $modules->id, 'pid' => $pid]) : route('module.store', ['pid' => $pid]) }}" method="post">
 
     @csrf
 
@@ -11,12 +11,12 @@
 
 
 
-    <label class="fw-bold" for="team_member">Select Team Member</label>
+    {{-- <label class="fw-bold" for="team_member">Select Team Member</label>
     <select name="module_assign_to" required class="form-control">
      @foreach($teamMembers as $member)
     <option value="{{ $member->id }} {{ isset($modules) && $modules->modules_assign_to == $member->id ? 'selected' : '' }}">{{ $member->name }}</option>
     @endforeach
-    </select>
+    </select> --}}
 
 
 

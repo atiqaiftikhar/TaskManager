@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Module;
+use App\Models\Project;
 use App\Models\ProjectUser;
 use App\Models\Task;
 use App\Models\User;
@@ -11,31 +12,39 @@ use Illuminate\Support\Facades\Auth;
 
 class ModuleController extends Controller
 {
-    public function module($tid)
+    public function module($pid)
 {
-// dd($tid);
-    $task = Task::findOrFail($tid);
+// dd($pid);
+    $project= Project::findOrFail($pid);
 
 
-    $modules = Module::where('task_id', $tid)->get();
+    $modules = Module::where('project_id', $pid)->get();
 
 
-    return view('admin.module.index', compact('task','modules'));
+    return view('admin.module.index', compact('project','modules'));
 }
 
-public function create($tid)
+public function create($pid)
 {
     $modules= new Module();
-    $task = Task::find($tid);
-    $projectUsers = ProjectUser::where('project_id', $task->project_id)->pluck('user_id');
-    $teamMembers = User::whereIn('id', $projectUsers)->get();
-    return view('admin.module.create', compact('teamMembers','modules','task','tid'));
+    // $task = Task::find($tid);
+    $project = Project::find($pid);
+    // if (!$project) {
+    //     abort(404);
+    // }
+
+    // $projectUsers = ProjectUser::where('project_id', $project->id)->pluck('user_id');
+    // $teamMembers = User::whereIn('id', $projectUsers)->get();
+
+    // // $projectUsers = ProjectUser::where('project_id', $task->project_id)->pluck('user_id');
+
+    return view('admin.module.create', compact('modules','project','pid'));
 }
 
 
 
 
-public function store(Request $request, $tid) {
+public function store(Request $request, $pid) {
 
     $validatedData = $request->validate([
 
@@ -44,11 +53,11 @@ public function store(Request $request, $tid) {
     ]);
 
 
-    $task = Task::findOrFail($tid);
+    $project= Project::findOrFail($pid);
 
 
     $modules = new Module();
-    $modules->task_id = $task->id;
+    $modules->project_id = $project->id;
 
     $modules->module_created_by = Auth::id();
     $modules->name = $validatedData['name'];
@@ -57,24 +66,21 @@ public function store(Request $request, $tid) {
     $modules->save();
 
 
-    return redirect()->route('module.index', $tid)->with('success', 'Module created successfully.');
+    return redirect()->route('module.index', $pid)->with('success', 'Module created successfully.');
 }
-public function edit($tid, $id)
+public function edit($pid, $id)
 {
 
-    $tasks = Task::findOrFail($tid);
-
-
+    $project= Project::findOrFail($pid);
     $modules = Module::findOrFail($id);
-    $projectUsers = ProjectUser::where('project_id', $tasks->project_id)->pluck('user_id');
 
-
-    $teamMembers = User::whereIn('id', $projectUsers)->get();
-    return view('admin.module.create', compact('tasks', 'modules', 'tid','teamMembers'));
+    // $projectUsers = ProjectUser::where('project_id', $project->id)->pluck('user_id');
+    // $teamMembers = User::whereIn('id', $projectUsers)->get();
+    return view('admin.module.create', compact('project', 'modules', 'pid',));
 }
 
 
-    public function update(Request $request,$tid, $id)
+    public function update(Request $request,$pid, $id)
     {
 
 
@@ -99,18 +105,18 @@ public function edit($tid, $id)
 
 
 
-        return redirect()->route('module.index',['tid' => $tid])->with('success', 'Task Updated Successfully');
+        return redirect()->route('module.index',['pid' => $pid])->with('success', 'Module Updated Successfully');
     }
 
 
-    public function delete($tid, $id)
+    public function delete($pid, $id)
     {
         $modules=Module::find($id);
 
 
         $modules->delete();
 
-        return redirect()->back()->with('success', 'Task Deleted Successfully');
+        return redirect()->back()->with('success', 'Module Deleted Successfully');
     }
 
 }

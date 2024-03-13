@@ -21,4 +21,10 @@ public function tasks()
 {
     return $this->hasMany(Task::class);
 }
+public function modules()
+{
+    return $this->hasMany(Module::class);
+}
+
+
 }

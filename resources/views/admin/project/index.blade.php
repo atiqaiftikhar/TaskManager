@@ -21,7 +21,9 @@
                     <th class="text-uppercase text-primary text-xxs font-weight-bolder opacity-7">id</th>
                     <th class="text-uppercase text-primary text-xxs font-weight-bolder opacity-7 ps-2">Project Name</th>
                     <th class="text-uppercase text-primary text-xxs font-weight-bolder opacity-7 ps-2">Created By</th>
-                    <th class="text-uppercase text-primary text-xxs font-weight-bolder opacity-7 ps-2">Tasks</th>
+                    <th class="text-uppercase text-primary text-xxs font-weight-bolder opacity-7 ps-2">Module</th>
+
+
                     <th class="text-uppercase text-primary text-xxs font-weight-bolder opacity-7 ps-2  ">Action</th>
 
 
@@ -36,9 +38,11 @@
 
             <td>{{ $project->id }}</td>
             <td>{{ $project->name }}</td>
-            <td> {{ $project->created_by }}</td>
+            <td> {{ $project->creator->name }}</td>
 
-            <td> <a class="btn btn-dark btn-sm" href="{{ route('task.index', ['fid' => $project->id]) }}">Task</a></td>
+
+
+            <td> <a class="btn btn-dark btn-sm" href="{{ route('module.index', ['pid' => $project->id]) }}">Module</a></td>
 
            <td><a class="btn btn-primary btn-sm"
                 href="{{ route('project.edit', ['id' => $project->id]) }}"><i class="fa fa-edit"></i></a>

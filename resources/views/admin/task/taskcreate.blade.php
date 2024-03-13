@@ -11,7 +11,7 @@
         @endphp
     </div>
     @endif --}}
-    <form action="{{ isset($tasks) && $tasks->id  ? route('task.update', ['id' => $tasks->id, 'fid' => $fid]) : route('task.store', ['fid' => $fid]) }}" method="post">
+    <form action="{{ isset($tasks) && $tasks->id  ? route('task.update', ['id' => $tasks->id, 'mid' => $mid]) : route('task.store', ['mid' => $mid]) }}" method="post">
 
         @csrf
 

@@ -11,14 +11,14 @@
           <div class="card-header pb-0">
             <h3>Tasks</h3>
             <div class=" container text-end">
-                <a href="{{ route('task.create',$fid) }}" class="btn btn-success btn-sm mb-2 text-end">Add Task</a>
+                <a href="{{ route('task.create',$mid) }}" class="btn btn-success btn-sm mb-2 text-end">Add Task</a>
                 <?php
                 //dd($fid);
                 ?>
                </div>
           </div>
           <div class="card-body">
-            <form action="{{ route('task.index', ['fid' => $fid]) }}" method="GET">
+            <form action="{{ route('task.index', ['mid' => $mid]) }}" method="GET">
                 <div class="row">
                     <div class="col-md-2">
 
@@ -78,7 +78,7 @@
                     <th class="text-uppercase text-primary text-xxs font-weight-bolder opacity-7 ps-2">Task Name</th>
 
                     <th class="text-uppercase text-primary text-xxs font-weight-bolder opacity-7 ps-2  "></th>
-                    <th class="text-uppercase text-primary text-xxs font-weight-bolder opacity-7 ps-2  "></th>
+
 
                     <th class="text-uppercase text-primary text-xxs font-weight-bolder opacity-7 ps-2  ">Action</th>
 
@@ -96,15 +96,15 @@
             <td>{{ $task->title }}</td>
 
                 <td><a class="btn btn-info btn-sm"
-                    href="{{ route('task.detail', ['id' => $task->id,'fid'=>$fid]) }}"> Task Detail</a></td>
+                    href="{{ route('task.detail', ['id' => $task->id,'mid'=>$mid]) }}"> Task Detail</a></td>
 
-                    <td> <a class="btn btn-dark btn-sm" href="{{ route('module.index', ['tid' => $task->id]) }}">Module</a></td>
+
 
                  <td>
                     <a class="btn btn-primary btn-sm"
-                     href="{{ route('task.edit', ['id' => $task->id,'fid'=>$fid]) }}"><i class="fa fa-edit"></i>Edit</a>
+                     href="{{ route('task.edit', ['id' => $task->id,'mid'=>$mid]) }}"><i class="fa fa-edit"></i>Edit</a>
 
-                    <a class="btn btn-danger btn-sm" href="{{ route('task.delete', ['id' => $task->id,'fid'=>$fid]) }}"><i class="fa fa-trash"></i>Delete</a>
+                    <a class="btn btn-danger btn-sm" href="{{ route('task.delete', ['id' => $task->id,'mid'=>$mid]) }}"><i class="fa fa-trash"></i>Delete</a>
                 </td>
         </tr>
         @endforeach
