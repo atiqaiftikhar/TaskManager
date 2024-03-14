@@ -39,10 +39,21 @@ class User extends Authenticatable
  {
      return $this->hasMany(Task::class, 'assign_to');
  }
- public function role()
-    {
-        return $this->belongsTo(Role::class);
-    }
+ public function roles()
+ {
+     return $this->belongsToMany(Role::class);
+ }
+ public function permissions()
+ {
+     return $this->belongsToMany(Permission::class);
+ }
+
+
+
+
+
+
+
     /**
      * The attributes that should be hidden for serialization.
      *

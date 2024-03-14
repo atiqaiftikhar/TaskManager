@@ -414,18 +414,13 @@ public function store(Request $request, $mid)
 
 public function delete($mid, $id)
 {
-    // Find the task by its ID
     $task = Task::findOrFail($id);
 
-    // Ensure that the task belongs to the specified module
     if ($task->module_id != $mid) {
-        abort(403, 'Unauthorized action.'); // Return a 403 Forbidden response if the task doesn't belong to the module
+        abort(403, 'Unauthorized action.');
     }
 
-    // Delete the task
     $task->delete();
-
-    // Redirect back to the previous page with a success message
     return redirect()->back()->with('success', 'Task Deleted Successfully');
 }
 

@@ -13,5 +13,8 @@ class Permission extends Model
     {
         return $this->belongsTo(PermissionCategory::class, 'per_category_id');
     }
+    public function roles() {
+        return $this->belongsToMany(Role::class);
+    }
 
 }

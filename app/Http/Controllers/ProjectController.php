@@ -7,6 +7,8 @@ use App\Notifications\UserAddedToTeamNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+
+
 class ProjectController extends Controller
 {
 
@@ -43,7 +45,7 @@ class ProjectController extends Controller
 }
     public function create ()
     {
-
+        
         $projects= new Project();
         // $users = User::get();
         $teamMembers = User::get();

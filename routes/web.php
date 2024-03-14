@@ -15,6 +15,7 @@ use App\Http\Controllers\RolePermissionController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\TaskViewController;
 use App\Http\Controllers\UserController;
+use App\Http\Middleware\CheckRole;
 use App\Models\Project;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -43,10 +44,9 @@ Route::get('/projects/{id}', 'ProjectController@show')->name('projects.show');
 
 
 
-
+// Route::group(['prefix' => 'admin', 'middleware' => ['permission']], function () {
 Route::group(['prefix'=>'admin'],function(){
 
-    // Route::group(['middleware' => 'admin'], function () {
         Route::group(['prefix'=>'/roles'], function(){
             Route::get('/', [RoleController::class, 'index'])->name('roles.index');
             Route::get('/create', [RoleController::class, 'create'])->name('roles.create');
