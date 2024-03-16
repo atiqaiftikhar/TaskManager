@@ -10,12 +10,14 @@
         <div class="card mb-4">
           <div class="card-header pb-0">
             <h3>Tasks</h3>
+            @can('create-task')
             <div class=" container text-end">
+                @can('has-permission', 'task.create')
                 <a href="{{ route('task.create',$mid) }}" class="btn btn-success btn-sm mb-2 text-end">Add Task</a>
-                <?php
-                //dd($fid);
-                ?>
+                @endcan
+
                </div>
+               @endcan
           </div>
           <div class="card-body">
             <form action="{{ route('task.index', ['mid' => $mid]) }}" method="GET">
@@ -95,16 +97,26 @@
             <td>{{$task->project->name}}</td>
             <td>{{ $task->title }}</td>
 
-                <td><a class="btn btn-info btn-sm"
-                    href="{{ route('task.detail', ['id' => $task->id,'mid'=>$mid]) }}"> Task Detail</a></td>
+                <td>
+                     {{-- @can('read-project') --}}
+                     @can('has-permission', 'task.detail')
+                    <a class="btn btn-info btn-sm"
+                    href="{{ route('task.detail', ['id' => $task->id,'mid'=>$mid]) }}"> Task Detail</a>
+                @endcan
+            </td>
 
 
 
                  <td>
+                    {{-- @can('edit-task') --}}
+                    @can('has-permission', 'task.edit')
                     <a class="btn btn-primary btn-sm"
                      href="{{ route('task.edit', ['id' => $task->id,'mid'=>$mid]) }}"><i class="fa fa-edit"></i>Edit</a>
-
+                     @endcan
+                     {{-- @can('delete-task') --}}
+                     @can('has-permission', 'task.delete')
                     <a class="btn btn-danger btn-sm" href="{{ route('task.delete', ['id' => $task->id,'mid'=>$mid]) }}"><i class="fa fa-trash"></i>Delete</a>
+                    @endcan
                 </td>
         </tr>
         @endforeach

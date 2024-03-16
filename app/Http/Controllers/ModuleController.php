@@ -9,12 +9,19 @@ use App\Models\Task;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class ModuleController extends Controller
 {
     public function module($pid)
 {
 // dd($pid);
+// if (Gate::denies('read-module')) {
+//     abort(403, 'Unauthorized action.');
+// }
+if (Gate::denies('has-permission', 'module.index')) {
+    abort(403, 'Unauthorized action.');
+}
     $project= Project::findOrFail($pid);
 
 
@@ -26,17 +33,16 @@ class ModuleController extends Controller
 
 public function create($pid)
 {
-    $modules= new Module();
-    // $task = Task::find($tid);
-    $project = Project::find($pid);
-    // if (!$project) {
-    //     abort(404);
+    // if (Gate::denies('create-module')) {
+    //     abort(403, 'Unauthorized action.');
     // }
+    if (Gate::denies('has-permission', 'module.create')) {
+        abort(403, 'Unauthorized action.');
+    }
 
-    // $projectUsers = ProjectUser::where('project_id', $project->id)->pluck('user_id');
-    // $teamMembers = User::whereIn('id', $projectUsers)->get();
+    $project = Project::find($pid);
 
-    // // $projectUsers = ProjectUser::where('project_id', $task->project_id)->pluck('user_id');
+    $modules= new Module();
 
     return view('admin.module.create', compact('modules','project','pid'));
 }
@@ -72,6 +78,12 @@ public function edit($pid, $id)
 {
 
     $project= Project::findOrFail($pid);
+    // if (Gate::denies('edit-module', $project)) {
+    //     abort(403, 'Unauthorized action.');
+    // }
+    if (Gate::denies('has-permission', 'module.edit')) {
+        abort(403, 'Unauthorized action.');
+    }
     $modules = Module::findOrFail($id);
 
     // $projectUsers = ProjectUser::where('project_id', $project->id)->pluck('user_id');
@@ -112,6 +124,10 @@ public function edit($pid, $id)
     public function delete($pid, $id)
     {
         $modules=Module::find($id);
+
+        if (Gate::denies('has-permission', 'module.delete')) {
+            abort(403, 'Unauthorized action.');
+        }
 
 
         $modules->delete();

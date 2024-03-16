@@ -10,12 +10,15 @@
         <div class="card mb-4">
           <div class="card-header pb-0">
             <h3>Module</h3>
+            {{-- @can('create-module') --}}
+            @can('has-permission', 'module.create')
             <div class=" container text-end">
 
                 <a href="{{ route('module.create', ['pid' => $project->id]) }}" class="btn btn-success btn-sm">Create Module</a>
 
 
                </div>
+               @endcan
           </div>
 
           <div class="card-body px-0 pt-0 pb-2">
@@ -48,16 +51,24 @@
             <td>{{$module->project->name}}</td>
             <td>{{ $module->name }}</td>
             <td>{{ $module->createdBy->name }}</td>
-            <td> <a class="btn btn-dark btn-sm" href="{{ route('task.index', ['mid' => $module->id]) }}">Task</a></td>
+            <td>
+                @can('has-permission', 'task.index')
+                <a class="btn btn-dark btn-sm" href="{{ route('task.index', ['mid' => $module->id]) }}">Task</a></td>
+                @endcan
 
 
 <td>
+    {{-- @can('edit-module') --}}
+    @can('has-permission', 'module.edit')
 
                     <a class="btn btn-primary btn-sm"
                      href="{{ route('module.edit', ['id' => $module->id,'pid' => $project->id]) }}"><i class="fa fa-edit"></i>Edit</a>
-
+@endcan
+{{-- @can('delete-module') --}}
+@can('has-permission', 'module.delete')
                     <a class="btn btn-danger btn-sm" href="{{ route('module.delete', ['id' => $module->id,'pid' => $project->id]) }}"><i class="fa fa-trash"></i>Delete</a>
                 </td>
+                @endcan
         </tr>
         @endforeach
 

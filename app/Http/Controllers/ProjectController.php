@@ -6,8 +6,7 @@ use App\Models\User;
 use App\Notifications\UserAddedToTeamNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
-
+use Illuminate\Support\Facades\Gate;
 
 class ProjectController extends Controller
 {
@@ -18,22 +17,56 @@ class ProjectController extends Controller
  }
     // public function project()
     // {
+    //     if (Gate::denies('read-project')) {
+    //         abort(403, 'Unauthorized action.');
+    //     }
     //     $projects=Project::get();
     //     return view('admin.project.index',compact('projects'));
 
     // }
-    public function project()
+//     public function project()
+// {
+
+//     $userId = Auth::id();
+
+
+//     $userRoleId = Auth::user()->role_id;
+
+
+//     if ($userRoleId == 2) {
+
+//         $projects = Project::all();
+//     } else {
+
+//         $projects = Project::whereHas('tasks', function ($query) use ($userId) {
+//             $query->where('assign_to', $userId);
+//         })->get();
+//     }
+
+//     return view('admin.project.index', compact('projects'));
+// }
+public function project()
 {
 
+    // if (Gate::denies('read-project')) {
+    //     abort(403, 'Unauthorized action.');
+    // }
+
+    if (Gate::denies('has-permission', 'project.index')) {
+        abort(403, 'Unauthorized action.');
+    }
     $userId = Auth::id();
-
-
     $userRoleId = Auth::user()->role_id;
 
 
-    if ($userRoleId == 2) {
-
+    if ($userRoleId == 1) {
         $projects = Project::all();
+    } elseif ($userRoleId == 2) {
+
+        $projects = Project::where('created_by', $userId)
+            ->orWhereHas('tasks', function ($query) use ($userId) {
+                $query->where('assign_to', $userId);
+            })->get();
     } else {
 
         $projects = Project::whereHas('tasks', function ($query) use ($userId) {
@@ -45,9 +78,14 @@ class ProjectController extends Controller
 }
     public function create ()
     {
-        
+        // if (Gate::denies('create-project')) {
+        //     abort(403, 'Unauthorized action.');
+        // }
+        if (Gate::denies('has-permission', 'project.create')) {
+            abort(403, 'Unauthorized action.');
+        }
         $projects= new Project();
-        // $users = User::get();
+
         $teamMembers = User::get();
 
         return view('admin.project.projectcreate',compact('projects','teamMembers'));
@@ -103,6 +141,12 @@ public function store(Request $request)
     {
 
         $projects=Project::find($id);
+        // if (Gate::denies('edit-project', $projects)) {
+        //     abort(403, 'Unauthorized action.');
+        // }
+        if (Gate::denies('has-permission', 'project.edit')) {
+            abort(403, 'Unauthorized action.');
+        }
         $teamMembers = User::get();
 
       return view('admin.project.projectcreate',compact('projects','teamMembers'));
@@ -124,7 +168,12 @@ public function store(Request $request)
     public function delete($id)
     {
         $projects=Project::find($id);
-
+        // if (Gate::denies('delete-project', $projects)) {
+        //     abort(403, 'Unauthorized action.');
+        // }
+        if (Gate::denies('has-permission', 'project.delete')) {
+            abort(403, 'Unauthorized action.');
+        }
         $projects->delete();
 
         return redirect()->back()->with('success', 'Project Deleted Successfully');

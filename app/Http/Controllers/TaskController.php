@@ -14,6 +14,7 @@ use App\Models\Task;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class TaskController extends Controller
 {
@@ -114,10 +115,13 @@ private function getDynamicOptions()
 // }
 public function task($mid, Request $request)
 {
-    // Construct the base query for tasks associated with the module
+    if (Gate::denies('has-permission', 'task.index')) {
+        abort(403, 'Unauthorized action.');
+    }
+
     $query = Task::where('module_id', $mid);
 
-    // Apply filters based on request parameters
+
     if ($priority = $request->priority) {
         $query->where('priority', $priority);
     }
@@ -134,12 +138,12 @@ public function task($mid, Request $request)
         $query->where('status', $status);
     }
 
-    // Retrieve the list of user IDs who created tasks in the module's project
+
     $createdByUserIds = Task::where('module_id', $mid)
                             ->distinct('task_created_by')
                             ->pluck('task_created_by');
 
-    // Retrieve users who created tasks in the module's project
+
     $createdByUsers = User::whereIn('id', $createdByUserIds)->get();
     $userId = Auth::id();
         $userRoleId = Auth::user()->role_id;
@@ -149,18 +153,18 @@ public function task($mid, Request $request)
         } else {
             $tasks = $query->where('assign_to', $userId)->get();
         }
-    // Retrieve the module and its associated project
+
     $module = Module::findOrFail($mid);
     $project = Project::findOrFail($module->project_id);
 
-    // Retrieve team members associated with the project
+
     $teamMembers = User::whereIn('id', function ($query) use ($project) {
         $query->select('user_id')
               ->from('project_users')
               ->where('project_id', $project->id);
     })->get();
 
-    // Dynamic options might need to be fetched from a separate method
+
     $dynamicOptions = $this->getDynamicOptions();
 
     // Return the view with the retrieved data
@@ -188,8 +192,12 @@ public function task($mid, Request $request)
 //     }
 public function create($mid)
 {
-    $tasks = new Task();
+
     $module = Module::findOrFail($mid);
+    if (Gate::denies('has-permission', 'task.create')) {
+        abort(403, 'Unauthorized action.');
+    }
+    $tasks = new Task();
     $project = Project::findOrFail($module->project_id);
     $teamMembers = User::whereIn('id', $project->users()->pluck('user_id'))->get();
     $taskCreators = Task::where('module_id', $mid)->pluck('task_created_by')->unique();
@@ -254,10 +262,10 @@ public function store(Request $request, $mid)
         'priority' => 'required|in:' . implode(',', array_keys(TaskPriority::getPriorityOptions())),
     ]);
 
-    // Retrieve the module associated with the task
+
     $modules = Module::findOrFail($mid);
 
-    // Create a new Task instance and fill it with the validated data
+
     $tasks = new Task();
     $tasks->assign_to = $request->input('assign_to');
     $tasks->module_id = $mid;
@@ -308,6 +316,9 @@ public function store(Request $request, $mid)
     // }
     public function edit($mid, $id)
 {
+    if (Gate::denies('has-permission', 'task.edit')) {
+        abort(403, 'Unauthorized action.');
+    }
     $tasks = Task::findOrFail($id);
     $module = Module::findOrFail($mid);
     $project = Project::findOrFail($module->project_id);
@@ -414,6 +425,9 @@ public function store(Request $request, $mid)
 
 public function delete($mid, $id)
 {
+    if (Gate::denies('has-permission', 'task.delete')) {
+        abort(403, 'Unauthorized action.');
+    }
     $task = Task::findOrFail($id);
 
     if ($task->module_id != $mid) {

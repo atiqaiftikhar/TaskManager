@@ -67,35 +67,67 @@ class RolePermissionController extends Controller
 
     //     return redirect()->route('rolepermission.index')->with('success', 'Permissions assigned to users with the role.');
     // }
+
     public function store(Request $request, $roleId)
-{
-    $role = Role::find($roleId);
-    if (!$role) {
-        abort(404);
-    }
+    {
+        $role = Role::find($roleId);
+        if (!$role) {
+            abort(404);
+        }
 
-    $permissions = $request->permissions;
+        $permissions = $request->permissions;
 
-
-    if (!empty($permissions)) {
 
         RolePermission::where('role_id', $roleId)->delete();
 
-        // Prepare data for bulk insertion
-        $rolePermissions = [];
-        foreach ($permissions as $permission) {
-            $rolePermissions[] = [
-                'role_id' => $roleId,
-                'permission_id' => $permission,
-            ];
+
+        if (!empty($permissions)) {
+
+            $rolePermissions = [];
+            foreach ($permissions as $permission) {
+                $rolePermissions[] = [
+                    'role_id' => $roleId,
+                    'permission_id' => $permission,
+                ];
+            }
+
+            // Bulk insert the new role permissions
+            RolePermission::insert($rolePermissions);
         }
 
-        // Bulk insert the new role permissions
-        RolePermission::insert($rolePermissions);
+        return redirect()->route('rolepermission.index')->with('success', 'Permissions assigned to users with the role.');
     }
 
-    // return redirect()->back()->with('success', 'Permissions Updated Successfully!');
-    return redirect()->route('rolepermission.index')->with('success', 'Permissions assigned to users with the role.');
-}
+
+//     public function store(Request $request, $roleId)
+// {
+//     $role = Role::find($roleId);
+//     if (!$role) {
+//         abort(404);
+//     }
+
+//     $permissions = $request->permissions;
+
+
+//     if (!empty($permissions)) {
+
+//         RolePermission::where('role_id', $roleId)->delete();
+
+//         // Prepare data for bulk insertion
+//         $rolePermissions = [];
+//         foreach ($permissions as $permission) {
+//             $rolePermissions[] = [
+//                 'role_id' => $roleId,
+//                 'permission_id' => $permission,
+//             ];
+//         }
+
+//         // Bulk insert the new role permissions
+//         RolePermission::insert($rolePermissions);
+//     }
+
+//     // return redirect()->back()->with('success', 'Permissions Updated Successfully!');
+//     return redirect()->route('rolepermission.index')->with('success', 'Permissions assigned to users with the role.');
+// }
 
 }
