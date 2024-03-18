@@ -4,7 +4,7 @@
 
     @csrf
 
-    <h1>Module Form </h1>
+    <h1>Module For {{$project->name }}</h1>
 
     <label class="fw-bold">Module Title</label>
     <input type="text" required class="form-control" name="name" value="{{ $modules->name ?? '' }}" placeholder="">

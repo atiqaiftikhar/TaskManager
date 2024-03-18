@@ -3,6 +3,7 @@
 <div class="container">
     <form action=" {{ isset($permission) && $permission->id  ? route('permission.update', ['id' => $permission->id, 'cid' => $cid]) : route('permission.store', ['cid' => $cid]) }}"    method="post">
         @csrf
+        <h1> {{$permission_category->name }} Permission</h1>
         <label class="fw-bold">Title</label>
         <input type="text" required class="form-control" name="title" value="{{isset($permission)? $permission->title :'' }}" placeholder="Title">
         <label class="fw-bold">Permission</label>

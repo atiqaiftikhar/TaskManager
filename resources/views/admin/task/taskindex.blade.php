@@ -9,15 +9,15 @@
       <div class="col-12">
         <div class="card mb-4">
           <div class="card-header pb-0">
-            <h3>Tasks</h3>
-            @can('create-task')
+            <h3>{{$module->name}} Tasks </h3>
+
             <div class=" container text-end">
                 @can('has-permission', 'task.create')
                 <a href="{{ route('task.create',$mid) }}" class="btn btn-success btn-sm mb-2 text-end">Add Task</a>
                 @endcan
 
                </div>
-               @endcan
+
           </div>
           <div class="card-body">
             <form action="{{ route('task.index', ['mid' => $mid]) }}" method="GET">

@@ -15,7 +15,8 @@
 
         @csrf
 
-        <h1>Task Form </h1>
+        <h3>Task for {{$module->name}}</h3>
+        {{-- and for project:<h2>{{$project->name }} --}}
 
         <label class="fw-bold">Task Title</label>
         <input type="text" required class="form-control" name="title" value="{{ $tasks->title ?? '' }}" placeholder="">

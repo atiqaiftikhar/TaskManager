@@ -168,7 +168,7 @@ public function task($mid, Request $request)
     $dynamicOptions = $this->getDynamicOptions();
 
     // Return the view with the retrieved data
-    return view('admin.task.taskindex', compact('tasks', 'mid', 'dynamicOptions', 'teamMembers', 'createdByUsers'));
+    return view('admin.task.taskindex', compact('tasks', 'mid', 'dynamicOptions', 'teamMembers', 'createdByUsers','module'));
 }
 
 // public function create ($fid)

@@ -9,7 +9,7 @@
       <div class="col-12">
         <div class="card mb-4">
           <div class="card-header pb-0">
-            <h3>Module</h3>
+            <h3> {{$project->name }} Module</h3>
             {{-- @can('create-module') --}}
             @can('has-permission', 'module.create')
             <div class=" container text-end">

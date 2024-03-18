@@ -1,7 +1,7 @@
 @extends('layouts.masterback')
 @section('content')
 <div class="container">
-    <h1 class="text-center fw-bold">Permission</h1>
+    <h1 class="text-center fw-bold">{{$permission_category->name }} Permission</h1>
 
    <div class="text-end">
     <a href="{{ route('permission.create',$cid) }}" class="btn btn-success btn-sm mb-2 text-end">Add Permisson</a>

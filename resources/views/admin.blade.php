@@ -324,7 +324,7 @@
                           <img src="../assets/img/team-1.jpg" alt="team1">
                         </a>
                         <a href="javascript:;" class="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Romina Hadid">
-                          <img src="../assets/img/team-2.jpg" alt="team2">
+                          {{-- <img src="../assets/img/team-2.jpg" alt="team2"> --}}
                         </a>
                         <a href="javascript:;" class="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Alexander Smith">
                           <img src="../assets/img/team-3.jpg" alt="team3">
@@ -364,7 +364,7 @@
                     <td>
                       <div class="avatar-group mt-2">
                         <a href="javascript:;" class="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Romina Hadid">
-                          <img src="../assets/img/team-2.jpg" alt="team5">
+                          {{-- <img src="../assets/img/team-2.jpg" alt="team5"> --}}
                         </a>
                         <a href="javascript:;" class="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Jessica Doe">
                           <img src="../assets/img/team-4.jpg" alt="team6">
