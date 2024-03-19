@@ -31,12 +31,13 @@
     </form>
 </div>
 
-{{-- <script>
+<script>
 
     function handleCheckboxChange(checkbox) {
 
         const projectPermissions = ['Create Project', 'Edit Project', 'Delete Project', 'Update Project', 'Read Project'];
         const taskPermissions = ['Create Task', 'Edit Task', 'Delete Task', 'Update Task', 'Read Task'];
+        const modulePermissions = ['Create Module', 'Edit Module', 'Delete Module', 'Update Module', 'Read Module'];
         const userPermissions = ['Create User', 'Edit User', 'Delete User', 'Update User', 'Read User'];
 
 
@@ -83,7 +84,7 @@
 });
 
     });
-</script> --}}
+</script>
 
 {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
