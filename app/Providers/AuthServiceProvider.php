@@ -4,6 +4,7 @@ namespace App\Providers;
 
 // use Illuminate\Support\Facades\Gate;
 
+use App\Models\Permission;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -179,21 +180,45 @@ class AuthServiceProvider extends ServiceProvider
 
 
 // }
-
 public function boot()
 {
     $this->registerPolicies();
 
-
     Gate::define('has-permission', function ($user, $permission) {
         if ($user->role === 'admin') {
-            return true;
+            // Check if the permission exists in the database
+            $existingPermission = Permission::where('permission', $permission)->first();
+
+            // If the permission exists, check if it is assigned to the admin role
+            if ($existingPermission) {
+                $adminRole = Role::where('role', 'admin')->first();
+                return $adminRole->permissions->contains($existingPermission);
+            } else {
+                // If the permission does not exist, deny access
+                return false;
+            }
         }
-        $role = Role::find($user->role_id);
-        if ($role) {
-            return $role->permissions()->where('permission', $permission)->exists();
-        }
-        return false;
+
+        // For non-admin users, check if the user's role has the given permission
+        $role = Role::findOrFail($user->role_id);
+        return $role->permissions()->where('permission', $permission)->exists();
     });
 }
+// -------------------final its working------------------------------
+// public function boot()
+// {
+//     $this->registerPolicies();
+
+
+//     Gate::define('has-permission', function ($user, $permission) {
+//         if ($user->role === 'admin') {
+//             return true;
+//         }
+//         $role = Role::find($user->role_id);
+//         if ($role) {
+//             return $role->permissions()->where('permission', $permission)->exists();
+//         }
+//         return false;
+//     });
+// }
 }
