@@ -33,6 +33,7 @@ class RolePermissionController extends Controller
     $permission_categories = PermissionCategory::with('permissions')->get();
 
 
+    // dd($permission_categories->toArray());
     $selectedPermissions = $role->permissions->pluck('id')->toArray();
 
     return view('admin.rolepermission.create', compact('role', 'permissions', 'permission_categories', 'selectedPermissions'));

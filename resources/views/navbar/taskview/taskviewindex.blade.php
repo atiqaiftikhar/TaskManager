@@ -35,8 +35,8 @@
                 @endforeach
             @endif
         @endforeach
-        
-        
+
+
             @endforeach
         </tbody>
     </table>

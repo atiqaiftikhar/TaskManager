@@ -11,11 +11,11 @@ class TaskViewController extends Controller
 {
     public function index()
     {
-        $tasks = Task::with([ 'project', 'module'])->get();
-        $projects = Project::all(); 
-        $modules = Module::all(); 
+        // $tasks = Task::with([ 'project', 'module'])->get();
+        $projects = Project::all();
+        $modules = Module::all();
 
-        return view('navbar.taskview.taskviewindex', compact('tasks','projects','modules'));
+        return view('navbar.taskview.projectview', compact('projects','modules'));
 
     }
     public function show($id)
@@ -28,5 +28,5 @@ class TaskViewController extends Controller
         }
         return view('navbar.taskview.taskviewshow', compact('tasks'));
     }
-    
+
 }

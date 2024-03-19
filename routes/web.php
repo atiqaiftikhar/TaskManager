@@ -107,10 +107,10 @@ Route::get('/projects/{id}', 'ProjectController@show')->name('projects.show');
 
             });
 
-            Route::group(['prefix' => '/task/{mid}'], function() {
-            Route::get('/',[TaskViewController::class,'index'])->name('task.taskviewindex');
+            // Route::group(['prefix' => '/task/{mid}'], function() {
+            // Route::get('/',[TaskViewController::class,'index'])->name('task.taskviewindex');
 
-            });
+            // });
 
 
 
