@@ -11,16 +11,16 @@
                 <ul>
                     @foreach ($category->permissions as $permission)
 
-                    @php
+                    {{-- @php
                     $checked = ($role->role === 'admin') ? 'checked' : ($role->permissions->contains($permission->id) ? 'checked' : '');
                 @endphp
                 <input type="checkbox" name="permissions[]" value="{{ $permission->id }}" {{ $checked }}>
-                <label>{{ $permission->title }}</label>
+                <label>{{ $permission->title }}</label> --}}
 
-                                {{-- <input type="checkbox"   name="permissions[]" value="{{ $permission->id }}"
+                                <input type="checkbox"   name="permissions[]" value="{{ $permission->id }}"
                                     {{ $role->permissions->contains($permission->id) ? 'checked' : '' }}>
 
-                                <label>{{ $permission->title }}</label> --}}
+                                <label>{{ $permission->title }}</label>
 
 
                     @endforeach
