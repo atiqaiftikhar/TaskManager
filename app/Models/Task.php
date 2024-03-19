@@ -18,6 +18,12 @@ class Task extends Model
 {
     return $this->belongsTo(Project::class, 'project_id');
 }
+
+public function module()
+{
+    return $this->belongsTo(Module::class);
+}
+
 // public function modules()
 // {
 //     return $this->belongsTo(Module::class, 'module_id');

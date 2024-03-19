@@ -46,7 +46,7 @@ Route::get('/projects/{id}', 'ProjectController@show')->name('projects.show');
 
 // Route::group(['prefix' => 'admin', 'middleware' => ['permission']], function () {
     Route::middleware(['auth'])->group(function () {
-Route::group(['prefix'=>'admin'],function(){
+    Route::group(['prefix'=>'admin'],function(){
     Route::get("/",[AdminController::class,'index']);
 
         Route::group(['prefix'=>'/roles'], function(){
@@ -107,6 +107,10 @@ Route::group(['prefix'=>'admin'],function(){
 
             });
 
+            Route::group(['prefix' => '/task/{mid}'], function() {
+            Route::get('/',[TaskViewController::class,'index'])->name('task.taskviewindex');
+
+            });
 
 
 
