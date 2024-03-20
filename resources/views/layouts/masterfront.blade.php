@@ -3,11 +3,12 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 	<title>TaskEase</title>
 	<link rel="stylesheet" href="{{ asset('assets/bootstrap/css/bootstrap.min.css') }}">
 	<link rel="stylesheet" href="{{asset('assets/bootstrap/css/font-awesome.min.css')}}">
 	<script src="{{asset('assets/bootstrap/js/bootstrap.bundle.min.js')}}" type="text/javascript" charset="utf-8" async defer></script>
-
     <link href="{{asset('assets/vendor/aos/aos.css')}}" rel="stylesheet">
     <link href="{{asset('assets/vendor/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
     <link href="{{asset('assets/vendor/bootstrap-icons/bootstrap-icons.css')}}" rel="stylesheet">
@@ -15,28 +16,37 @@
     <link href="{{asset('assets/vendor/glightbox/css/glightbox.min.css')}}" rel="stylesheet">
     <link href="{{asset('assets/vendor/remixicon/remixicon.css')}}" rel="stylesheet">
     <link href="{{asset('assets/vendor/swiper/swiper-bundle.min.css')}}" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFOnpDpii0CWuVAiFuKTBzKFusLwE8NLzqVW80NbJQxTC1QwkTlnD9cO7z39" crossorigin="anonymous"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+              
+    {{-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"> --}}
+    {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"> --}}
     <style>
-          .navbar {
-        height: 70px;
+
+    .navbar {
+    z-index: 1000; 
+    position: relative; 
+    opacity: 1;
+    height: 70px;
+
     }
-        /* body {
-    background-image: url('assets/img/Black Blue Modern Linktree Background  .png');
-    background-size: cover;
-    background-position: center;
-    height: 100vh;
-    width: 100%;
 
-} */
-
-/* Make navbar transparent */
- .navbar {
-    /* background-color: transparent !important; */
-    opacity: 2;
+   .carousel {
+    z-index: 1; 
+   }
+   .navbar-nav i {
+  margin-right: 6px; 
+} 
+    .navbar-brand {
+  display: flex; 
+  justify-content: center; 
+  align-items: center; 
+  height: 60px; 
+  
 }
+ 
 .containerm {
     max-width: 600px;
     margin: 0 auto;
@@ -64,9 +74,9 @@
 }
 
 .btn-outline-custom:hover {
-    color: #fff; /* Change text color on hover */
-    background-color: #47a5c7; /* Change background color on hover */
-    border-color: #47a5c7; /* Change border color on hover */
+    color: #fff; 
+    background-color: #47a5c7; 
+    border-color: #47a5c7; 
 }
 .btn-custom {
     background-color: #47a5c7;
@@ -87,13 +97,60 @@
     background-size: cover;
     background-repeat: no-repeat; }
 
+    :root {
+  --h1-font-size: 40px;
+  --h2-font-size: 30px;
+  --h3-font-size: 24px;
+  --p-font-size: 15px;
+
+}
+
+h1 {
+  font-size: var(--h1-font-size);
+  font-weight: bold; 
+  font-family: "Times New Roman", Times, serif;
+  color: #3740c1; 
+  /* line-height: 1.5;  */
+  text-align: center; 
+  text-transform: uppercase; 
+}
+
+h2 {
+  font-size: var(--h2-font-size);
+  font-family: "Times New Roman", Times, serif;
+  text-align: center; 
+  font-weight: bold; 
+  color:#47a2cc;
+}
+
+h3 {
+  font-size: var(--h3-font-size);
+  font-family: "Times New Roman", Times, serif;
+  text-align: center; 
+
+}
+  
+p {
+  font-size: var(--p-font-size);
+  font-family: "Georgia", serif;
+  text-align: center; 
+
+}
+
+
+
+
+
+
+
+
     </style>
 
 </head>
 <body>
 
 
-<nav class="navbar  bg-light navbar-light navbar-expand-lg">
+<nav class="navbar  bg-black navbar-dark navbar-expand-md top-fixed">
 		<div class="container">
 			<a class="navbar-brand" href="" style="color: #47a5c7;" >
 			<img width="100" height="80" src="{{asset('assets/img/Logos.png')}}">TaskEase

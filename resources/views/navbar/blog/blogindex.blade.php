@@ -2,8 +2,8 @@
 @section('content')
 <img   height="100%" width="100%" src="assets/img/blogss.png">
 <div class="container" style="margin-top: 30px;">
-    <h1  class="text-center" style="color: #336f8b;">BLOGS</h1>
-    <h4  class="text-center" style="color: #202674; margin-top: 30px; ">
+    <h1  class="text-center" style="color: #47a2cc;">BLOGS</h1>
+    <h4  class="text-center" style="color: #3740c1; margin-top: 30px; ">
         Top 10 Project Management Blogs to Follow In 2022
     </h4>
 
