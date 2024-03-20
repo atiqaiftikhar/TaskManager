@@ -29,7 +29,7 @@ class AdminController extends Controller
 
 
     $user = Auth::user();
-    if($user->role == 'Super Admin'||$user->role == 'Admin' || $user->role == 'Task Manager' ||$user->role == 'Team Member' ||$user->role == 'User' ){
+    if($user->role == 'Admin' || $user->role == 'Task Manager' ||$user->role == 'Team Member' ||$user->role == 'User' ){
         return view('admin');
             }
             else{

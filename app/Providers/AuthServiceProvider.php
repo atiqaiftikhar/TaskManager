@@ -211,7 +211,7 @@ public function boot()
 
 
     Gate::define('has-permission', function ($user, $permission) {
-        if ($user->role === 'Super Admin') {
+        if ($user->role === 'Admin') {
             return true;
         }
         $role = Role::find($user->role_id);

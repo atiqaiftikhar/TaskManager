@@ -18,6 +18,7 @@
 
                             <input type="checkbox" name="permissions[]" value="{{ $permission->id }}"
                                 isDepend="{{ $permission->depend }}" category="{{ $category->id }}"
+                                userClicked=false
                                 {{ $role->permissions->contains($permission->id) ? 'checked' : '' }}>
 
                             <label>{{ $permission->title }}</label>
@@ -30,7 +31,6 @@
     </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-
         // function handleCheckboxChange(checkbox) {
 
         //     const projectPermissions = ['Create Project', 'Edit Project', 'Delete Project', 'Update Project',
@@ -80,27 +80,45 @@
 
 
         const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-checkboxes.forEach(checkbox => {
-    checkbox.addEventListener('change', () => {
-        console.log(checkbox);
-        let category = checkbox.getAttribute("category");
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', () => {
+                console.log(checkbox);
 
-        var elements = document.querySelectorAll('[category="' + category + '"]');
-        elements.forEach(elem => {
-            if (elem.getAttribute("isDepend")) {
-                elem.checked = checkbox.checked;
-            }
+                if (checkbox.getAttribute("isDepend")) {
+                    checkbox.setAttribute("userclicked", checkbox.checked == 1);
+                    return;
+                }
+
+                let category = checkbox.getAttribute("category");
+
+                var elements = document.querySelectorAll('[category="' + category + '"]');
+                let isAnyCheck = false;
+                let dependant = null;
+                elements.forEach(elem => {
+                    // console.log(elem);
+
+                    if (elem.getAttribute("isDepend")) {
+                        elem.checked = true;
+                        dependant = elem;
+                    } else {
+                        if (elem.checked) {
+                            isAnyCheck = true;
+                        }
+                    }
+                });
+
+                console.log(isAnyCheck);
+
+                // if (!checkbox.checked && checkbox.getAttribute("isDepend"))
+                if (dependant && !isAnyCheck && dependant.getAttribute("userclicked") == "false") {
+                    dependant.checked = false;
+                    // const dependentCheckbox = document.querySelector('[category="${category}"][isDepend]');
+                    // if (dependentCheckbox) {
+                    //     dependentCheckbox.checked = false;
+                    // }
+                }
+            });
         });
-
-
-        if (!checkbox.checked && checkbox.getAttribute("isDepend")) {
-            const dependentCheckbox = document.querySelector('[category="${category}"][isDepend]');
-            if (dependentCheckbox) {
-                dependentCheckbox.checked = false;
-            }
-        }
-    });
-});
 
 
 
@@ -129,14 +147,5 @@ checkboxes.forEach(checkbox => {
         //     });
 
         // });
-
-
-
-
-
-
-
     </script>
-
-
 @endsection
