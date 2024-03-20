@@ -28,124 +28,115 @@
             <button type="submit" class="btn btn-success">Add Permissions</button>
         </form>
     </div>
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        function handleCheckboxChange(checkbox) {
 
-            const projectPermissions = ['Create Project', 'Edit Project', 'Delete Project', 'Update Project',
-                'Read Project'
-            ];
-            const taskPermissions = ['Create Task', 'Edit Task', 'Delete Task', 'Update Task', 'Read Task'];
-            const modulePermissions = ['Create Module', 'Edit Module', 'Delete Module', 'Update Module', 'Read Module'];
-            const userPermissions = ['Create User', 'Edit User', 'Delete User', 'Update User', 'Read User'];
+        // function handleCheckboxChange(checkbox) {
 
-
-            let category;
-            if (checkbox.name.startsWith('project')) {
-                category = 'project';
-            } else if (checkbox.name.startsWith('task')) {
-                category = 'task';
-            } else if (checkbox.name.startsWith('user')) {
-                category = 'user';
-            }
-
-            let readPermission;
-            if (category === 'project') {
-                readPermission = 'Read Project';
-            } else if (category === 'task') {
-                readPermission = 'Read Task';
-            } else if (category === 'user') {
-                readPermission = 'Read User';
-            }
+        //     const projectPermissions = ['Create Project', 'Edit Project', 'Delete Project', 'Update Project',
+        //         'Read Project'
+        //     ];
+        //     const taskPermissions = ['Create Task', 'Edit Task', 'Delete Task', 'Update Task', 'Read Task'];
+        //     const modulePermissions = ['Create Module', 'Edit Module', 'Delete Module', 'Update Module', 'Read Module'];
+        //     const userPermissions = ['Create User', 'Edit User', 'Delete User', 'Update User', 'Read User'];
 
 
-            let readSelected = false;
-            for (let permission of category === 'project' ? projectPermissions : category === 'task' ? taskPermissions :
-                    userPermissions) {
-                if (permission !== readPermission && document.getElementById(`${category}_${permission}`).checked) {
-                    readSelected = true;
-                    break;
-                }
-            }
+        //     let category;
+        //     if (checkbox.name.startsWith('project')) {
+        //         category = 'project';
+        //     } else if (checkbox.name.startsWith('task')) {
+        //         category = 'task';
+        //     } else if (checkbox.name.startsWith('user')) {
+        //         category = 'user';
+        //     }
+
+        //     let readPermission;
+        //     if (category === 'project') {
+        //         readPermission = 'Read Project';
+        //     } else if (category === 'task') {
+        //         readPermission = 'Read Task';
+        //     } else if (category === 'user') {
+        //         readPermission = 'Read User';
+        //     }
 
 
-            if (readSelected) {
-                document.getElementById(`${category}_${readPermission}`).checked = true;
-                alert(`Automatically checked '${readPermission}' permission.`);
-            }
-        }
+        //     let readSelected = false;
+        //     for (let permission of category === 'project' ? projectPermissions : category === 'task' ? taskPermissions :
+        //             userPermissions) {
+        //         if (permission !== readPermission && document.getElementById(`${category}_${permission}`).checked) {
+        //             readSelected = true;
+        //             break;
+        //         }
+        //     }
+
+
+        //     if (readSelected) {
+        //         document.getElementById(`${category}_${readPermission}`).checked = true;
+        //         alert(`Automatically checked '${readPermission}' permission.`);
+        //     }
+        // }
+
+
 
 
         const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-        checkboxes.forEach(checkbox => {
-            checkbox.addEventListener('change', () => {
-                console.log(checkbox);
-                let category = checkbox.getAttribute("category");
+checkboxes.forEach(checkbox => {
+    checkbox.addEventListener('change', () => {
+        console.log(checkbox);
+        let category = checkbox.getAttribute("category");
 
-                var elements = document.querySelectorAll('[category="' + category + '"]');
-                elements.forEach(elem=>{
-                    if(elem.getAttribute("isDepend")){
-                        elem.checked = true;
-                        // console.log(elem.getAttribute("isDepend"));
-                        // return;
-                    }
-                })
-                // console.log(elements);
-
-                // Convert NodeList to array for easier handling
-                // var elementsArray = Array.from(elements);
-                // handleCheckboxChange(checkbox);
-            });
-
-        });
-    </script>
-
-    {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-$(document).ready(function() {
-    $('.permissionCheckbox').change(function() {
-        console.log("Checkbox changed");
-        var selectedPermission = $(this).val();
-        console.log("Selected permission:", selectedPermission);
-        var dependentPermissions = getPermissionDependencies(selectedPermission);
-        console.log("Dependent permissions:", dependentPermissions);
-
-        // Check if any dependent permissions are not selected
-        dependentPermissions.forEach(function(dependency) {
-            console.log("Checking dependency:", dependency);
-            if ($('.permissionCheckbox[value="' + dependency + '"]').prop('checked') === false) {
-                console.log("Dependency not selected, auto-selecting:", dependency);
-                // Automatically check the dependent permission
-                $('.permissionCheckbox[value="' + dependency + '"]').prop('checked', true);
+        var elements = document.querySelectorAll('[category="' + category + '"]');
+        elements.forEach(elem => {
+            if (elem.getAttribute("isDepend")) {
+                elem.checked = checkbox.checked;
             }
         });
-    });
 
-    function getPermissionDependencies(permissionTitle) {
-    var dependencies = [];
 
-    // Define category-specific permissions
-    var categoryPermissions = {
-        'project': ['Create Project', 'Edit Project', 'Delete Project', 'Update Project', 'Read Project'],
-        'task': ['Create Task', 'Edit Task', 'Delete Task', 'Update Task', 'Read Task'],
-        'module': ['Create Module', 'Edit Module', 'Delete Module', 'Update Module', 'Read Module'],
-        'user': ['Create User', 'Edit User', 'Delete User', 'Update User', 'Read User']
-        // Add more categories and their permissions as needed
-    };
-
-    // Check if the selected permission belongs to any category
-    Object.entries(categoryPermissions).forEach(([category, permissions]) => {
-        if (permissions.includes(permissionTitle)) {
-            // If any permission related to a category (e.g., project, task, module, user) is selected,
-            // automatically select the corresponding 'Read' permission for that category
-            dependencies.push(category + '.Read');
+        if (!checkbox.checked && checkbox.getAttribute("isDepend")) {
+            const dependentCheckbox = document.querySelector('[category="${category}"][isDepend]');
+            if (dependentCheckbox) {
+                dependentCheckbox.checked = false;
+            }
         }
     });
-
-    // Add more dependency logic as needed for other permissions
-
-    return dependencies;
-}
 });
-</script> --}}
+
+
+
+
+
+
+
+
+        // const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        // checkboxes.forEach(checkbox => {
+        //     checkbox.addEventListener('change', () => {
+        //         console.log(checkbox);
+        //         let category = checkbox.getAttribute("category");
+
+        //         var elements = document.querySelectorAll('[category="' + category + '"]');
+        //         elements.forEach(elem=>{
+        //             if(elem.getAttribute("isDepend")){
+        //                 elem.checked = true;
+        //                 // console.log(elem.getAttribute("isDepend"));
+        //                 return;
+        //             }
+
+
+        //         })
+
+        //     });
+
+        // });
+
+
+
+
+
+
+
+    </script>
+
+
 @endsection
