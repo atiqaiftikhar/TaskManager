@@ -8,9 +8,12 @@
         <div class="card mb-4">
           <div class="card-header pb-0">
             <h4>User Table</h4>
+            @can('has-permission', 'user.create')
             <div class=" container text-end">
+
               <a href="{{ route('user.create') }}" class="btn btn-primary btn-sm mb-2 text-end">Add User</a>
              </div>
+             @endcan
           </div>
 
           <div class="card-body px-0 pt-0 pb-2">
@@ -38,8 +41,13 @@
                         <td>{{ $user->email }}</td>
                         <td>{{ $user->role }}</td>
 
-                        <td><a class="btn btn-primary" href="{{ route('user.edit',['id'=>$user->id ]) }}"><i class="fa fa-edit"></i>Edit</a>
+                        <td>
+                            @can('has-permission', 'user.edit')
+                            <a class="btn btn-primary" href="{{ route('user.edit',['id'=>$user->id ]) }}"><i class="fa fa-edit"></i>Edit</a>
+                            @endcan
+                            @can('has-permission', 'user.delete')
                           <a class="btn btn-danger" onclick="showDeleteModal({{ $user->id }})"  ref="{{ route('user.delete',['id'=>$user->id ]) }}"><i class="fa fa-trash"></i>Delete</a>
+                          @endcan
 
                         </tr>
                     @endforeach
@@ -59,12 +67,12 @@
                   <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-            
+
               </div>
               <div class="modal-body">
                   Are you sure you want to delete this user?
               </div>
-              <div class="modal-footer">   
+              <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
 
                   <a class="btn btn-primary" href="{{ route('user.delete',['id'=>$user->id ]) }}"><i class="fa fa-delete"></i>Delete</a>
@@ -73,26 +81,26 @@
           </div>
       </div>
   </div>
-    
+
 
   {{-- <script>
-  
+
     function showDeleteModal(userId) {
-        
+
         $('#deleteConfirmationModal').attr('data-user-id', userId);
-        
+
         $('#deleteConfirmationModal').modal('show');
     }
 
-    
+
     $('.close').click(function() {
-        
+
         var userId = $('#deleteConfirmationModal').attr('data-user-id');
-        
+
         window.location.href = '/user/delete/' + userId;
     });
     $('#cancelDeleteBtn').click(function() {
-       
+
         $('#deleteConfirmationModal').modal('hide');
     });
 </script> --}}

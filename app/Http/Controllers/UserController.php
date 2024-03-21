@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class UserController extends Controller
 {
@@ -14,13 +15,18 @@ class UserController extends Controller
  }
 
     public function index(){
-
+        if (Gate::denies('has-permission', 'user.index')) {
+            abort(403, 'Unauthorized action.');
+        }
         $users=User::get();
 
         return view('admin.user.userindex',compact('users'));
 }
 public function create(){
 
+    if (Gate::denies('has-permission', 'user.create')) {
+        abort(403, 'Unauthorized action.');
+    }
     $users=new User();
 
     $roles=Role::get();
@@ -54,6 +60,9 @@ public function store(Request $request){
     return redirect()->route('user.index')->with('success', 'User created successfully');
 }
 public function edit($id){
+    if (Gate::denies('has-permission', 'user.edit')) {
+        abort(403, 'Unauthorized action.');
+    }
 
     $users=User::find($id);
     $roles=Role::get();
@@ -93,6 +102,9 @@ public function update(Request $request, $id){
 
     public function delete($id)
 {
+    if (Gate::denies('has-permission', 'user.delete')) {
+        abort(403, 'Unauthorized action.');
+    }
 
     $user = User::find($id);
     if (!$user) {
@@ -101,6 +113,6 @@ public function update(Request $request, $id){
     $user->delete();
     return redirect()->route('user.index');
 }
- 
+
 
 }
